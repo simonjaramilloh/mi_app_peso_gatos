@@ -1252,15 +1252,14 @@
                         currentUser = user;
                         isCloudActive = true;
                         
-                        // Si es el veterinario, carga el UID de Simón y oculta los botones de guardar
+                        // Si es el veterinario, carga el UID de simonjaramilloh12 y bloquea edición
                         if (user.email === 'simonjaramilloh25@gmail.com') {
                             updateSyncIndicator('Modo lectura - Veterinario', 'bg-blue-400');
-                            setupFirestoreListeners('Rcwyf5bkY9VByXez9qk5sLLue2o1');
+                            localStorage.removeItem(LOCAL_STORAGE_KEY); // Limpia datos viejos del navegador
+                            setupFirestoreListeners('sRxu7dDip7YVSpryBeNnkO1I6Au2');
                             
-                            // Ocultar botones de enviar para dejar la vista limpia
-                            document.querySelectorAll('button[type="submit"]').forEach(btn => btn.classList.add('hidden'));
-                            document.querySelectorAll('button[title="Eliminar"]').forEach(btn => btn.classList.add('hidden'));
-                            document.head.insertAdjacentHTML('beforeend', '<style>button[title="Eliminar"], button[title="Editar"], button[onclick^="markCareDoneToday"] { display: none !important; }</style>');
+                            // Oculta todos los botones de guardar, editar, eliminar y "Hecho hoy"
+                            document.head.insertAdjacentHTML('beforeend', '<style>button[type="submit"], button[title="Eliminar"], button[title="Editar"], button[onclick^="markCareDoneToday"] { display: none !important; }</style>');
                         } else {
                             updateSyncIndicator('Nube sincronizada (' + (user.email || 'activo') + ')', 'bg-emerald-400');
                             setupFirestoreListeners(user.uid);
@@ -1316,12 +1315,13 @@
 
         function setupFirestoreListeners(uid) {
             if (!currentUser || !db) return;
+            const isReadOnly = currentUser.uid !== uid;
 
             // 1. Perfiles y fechas de nacimiento
             const profilesCol = collection(db, 'artifacts', appId, 'users', uid, 'pet_profiles');
             onSnapshot(profilesCol, (snapshot) => {
                 if (snapshot.empty) {
-                    persistProfilesToCloud();
+                    if (!isReadOnly) persistProfilesToCloud();
                     return;
                 }
                 snapshot.forEach((docSnap) => {
@@ -1343,17 +1343,11 @@
             // 2. Pesajes
             const recordsCol = collection(db, 'artifacts', appId, 'users', uid, 'weight_records');
             onSnapshot(recordsCol, (snapshot) => {
-                if (!snapshot.empty) {
-                    const loaded = [];
-                    snapshot.forEach((docSnap) => loaded.push(docSnap.data()));
-                    records = loaded;
-                    saveToLocalCache();
-                    renderAll();
-                } else if (records.length > 0) {
-                    records.forEach(r => {
-                        setDoc(doc(db, 'artifacts', appId, 'users', uid, 'weight_records', r.id), r).catch(() => {});
-                    });
-                }
+                const loaded = [];
+                snapshot.forEach((docSnap) => loaded.push(docSnap.data()));
+                records = loaded;
+                saveToLocalCache();
+                renderAll();
             }, (err) => {
                 console.warn("Aviso en lectura de pesajes:", err.message);
             });
@@ -1361,50 +1355,38 @@
             // 3. Exámenes de sangre y hormonas
             const bloodCol = collection(db, 'artifacts', appId, 'users', uid, 'blood_records');
             onSnapshot(bloodCol, (snapshot) => {
-                if (!snapshot.empty) {
-                    const loaded = [];
-                    snapshot.forEach((docSnap) => loaded.push(docSnap.data()));
-                    bloodTests = loaded;
-                    saveToLocalCache();
-                    renderAll();
-                } else if (bloodTests.length > 0) {
-                    bloodTests.forEach(b => {
-                        setDoc(doc(db, 'artifacts', appId, 'users', uid, 'blood_records', b.id), b).catch(() => {});
-                    });
-                }
-            }, () => {});
+                const loaded = [];
+                snapshot.forEach((docSnap) => loaded.push(docSnap.data()));
+                bloodTests = loaded;
+                saveToLocalCache();
+                renderAll();
+            }, (err) => {
+                console.warn("Aviso en lectura de sangre:", err.message);
+            });
 
             // 4. Catálogo de cuidados y medicamentos
             const careCol = collection(db, 'artifacts', appId, 'users', uid, 'care_records');
             onSnapshot(careCol, (snapshot) => {
-                if (!snapshot.empty) {
-                    const loaded = [];
-                    snapshot.forEach((docSnap) => loaded.push(docSnap.data()));
-                    careItems = loaded;
-                    saveToLocalCache();
-                    renderAll();
-                } else if (careItems.length > 0) {
-                    careItems.forEach(c => {
-                        setDoc(doc(db, 'artifacts', appId, 'users', uid, 'care_records', c.id), c).catch(() => {});
-                    });
-                }
-            }, () => {});
+                const loaded = [];
+                snapshot.forEach((docSnap) => loaded.push(docSnap.data()));
+                careItems = loaded;
+                saveToLocalCache();
+                renderAll();
+            }, (err) => {
+                console.warn("Aviso en lectura de cuidados:", err.message);
+            });
 
             // 5. Registro de vacunas
             const vacCol = collection(db, 'artifacts', appId, 'users', uid, 'vaccine_records');
             onSnapshot(vacCol, (snapshot) => {
-                if (!snapshot.empty) {
-                    const loaded = [];
-                    snapshot.forEach((docSnap) => loaded.push(docSnap.data()));
-                    vaccineRecords = loaded;
-                    saveToLocalCache();
-                    renderAll();
-                } else if (vaccineRecords.length > 0) {
-                    vaccineRecords.forEach(v => {
-                        setDoc(doc(db, 'artifacts', appId, 'users', uid, 'vaccine_records', v.id), v).catch(() => {});
-                    });
-                }
-            }, () => {});
+                const loaded = [];
+                snapshot.forEach((docSnap) => loaded.push(docSnap.data()));
+                vaccineRecords = loaded;
+                saveToLocalCache();
+                renderAll();
+            }, (err) => {
+                console.warn("Aviso en lectura de vacunas:", err.message);
+            });
         }
 
         // --- Operaciones de guardado (Local + Nube) ---
