@@ -830,10 +830,38 @@
     <!-- Contenedor de notificaciones flotantes -->
     <div id="toastContainer" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
+    <!-- Modal de Inicio de Sesión por Correo -->
+<div id="loginModal" class="fixed inset-0 z-50 hidden bg-slate-900/95 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl animate-slide-up">
+        <div class="text-center mb-6">
+            <div class="w-12 h-12 bg-slate-900 rounded-xl mx-auto flex items-center justify-center mb-3">
+                <i class="ph-fill ph-cat text-2xl text-white"></i>
+            </div>
+            <h3 class="font-bold text-lg text-slate-900">Enzo & Gael</h3>
+            <p class="text-xs text-slate-500 mt-1">Inicia sesión para sincronizar tus datos</p>
+        </div>
+        <form id="loginForm" class="space-y-4">
+            <div>
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Correo electrónico</label>
+                <input type="email" id="emailInput" required class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Contraseña</label>
+                <input type="password" id="passwordInput" required class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900">
+            </div>
+            <div class="pt-2 flex flex-col gap-2">
+                <button type="submit" class="w-full py-2.5 rounded-xl bg-slate-900 text-white font-bold text-sm shadow-md hover:bg-slate-800 transition">Entrar</button>
+                <button type="button" id="btnRegister" class="w-full py-2.5 rounded-xl bg-slate-100 text-slate-700 font-bold text-sm border border-slate-200 hover:bg-slate-200 transition">Crear cuenta nueva</button>
+            </div>
+            <p id="loginError" class="text-xs text-rose-600 text-center font-semibold hidden mt-2"></p>
+        </form>
+    </div>
+</div>
+    
     <!-- Lógica de la aplicación y sincronización con Firebase -->
     <script type="module">
         import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js";
         import { getFirestore, doc, setDoc, deleteDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // ============================================================================
@@ -932,38 +960,23 @@
 
         // Datos iniciales por defecto
         const DEFAULT_PROFILES = {
-            Enzo: { idealWeight: 4.50, birthDate: "2023-05-10", bio: "Persa blanco" },
-            Gael: { idealWeight: 4.80, birthDate: "2023-08-22", bio: "Persa negro" }
+            Enzo: { idealWeight: 4, birthDate: "2025-11-16", bio: "Persa blanco" },
+            Gael: { idealWeight: 4, birthDate: "2025-01-31", bio: "Persa negro" }
         };
 
         const INITIAL_DEMO_RECORDS = [
             { id: 'demo-1', cat: 'Enzo', date: '2025-11-15', weight: 4.20, notes: 'Control veterinario anual' },
-            { id: 'demo-2', cat: 'Gael', date: '2025-11-15', weight: 4.55, notes: 'Control veterinario anual' },
-            { id: 'demo-3', cat: 'Enzo', date: '2025-12-15', weight: 4.32, notes: 'En casa (báscula)' },
-            { id: 'demo-4', cat: 'Gael', date: '2025-12-15', weight: 4.65, notes: 'En casa (báscula)' },
-            { id: 'demo-5', cat: 'Enzo', date: '2026-01-20', weight: 4.40, notes: 'Día de baño y peluquería' },
-            { id: 'demo-6', cat: 'Gael', date: '2026-01-20', weight: 4.78, notes: 'Cambio de alimento húmedo' },
-            { id: 'demo-7', cat: 'Enzo', date: '2026-02-18', weight: 4.45, notes: 'Peso estable' },
-            { id: 'demo-8', cat: 'Gael', date: '2026-02-18', weight: 4.72, notes: 'Más activo jugando' },
-            { id: 'demo-9', cat: 'Enzo', date: '2026-03-15', weight: 4.48, notes: 'Control mensual en casa' },
             { id: 'demo-10', cat: 'Gael', date: '2026-03-15', weight: 4.76, notes: 'Control mensual en casa' }
         ];
 
         const INITIAL_BLOOD_TESTS = [
             { id: 'blood-1', cat: 'Enzo', date: '2026-02-10', param: 'T4 total', value: 2.10, notes: 'Chequeo preventivo anual' },
-            { id: 'blood-2', cat: 'Gael', date: '2026-02-10', param: 'T4 total', value: 2.35, notes: 'Chequeo preventivo anual' },
-            { id: 'blood-3', cat: 'Enzo', date: '2026-02-10', param: 'TSH felina', value: 0.11, notes: 'Perfil tiroideo normal' },
             { id: 'blood-4', cat: 'Gael', date: '2026-02-10', param: 'Creatinina', value: 1.45, notes: 'Control renal razas persas' },
             { id: 'blood-5', cat: 'Enzo', date: '2026-02-10', param: 'SDMA', value: 9.0, notes: 'Función renal óptima' }
         ];
 
         const INITIAL_CARE_ITEMS = [
             { id: 'care-1', cat: 'Enzo', type: 'Baño y secado', title: 'Baño con champú blanqueador y secado tibio', lastDate: '2026-10-20', freqDays: 30, dose: 'Secar bien la base del pelaje' },
-            { id: 'care-2', cat: 'Gael', type: 'Baño y secado', title: 'Baño hidratante para manto negro', lastDate: '2026-10-20', freqDays: 30, dose: 'Acondicionador desenredante' },
-            { id: 'care-3', cat: 'Enzo', type: 'Corte de uñas', title: 'Corte de puntas delanteras y traseras', lastDate: '2026-11-01', freqDays: 15, dose: 'Revisar almohadillas' },
-            { id: 'care-4', cat: 'Gael', type: 'Corte de uñas', title: 'Corte de puntas delanteras y traseras', lastDate: '2026-11-01', freqDays: 15, dose: 'Revisar almohadillas' },
-            { id: 'care-5', cat: 'Enzo', type: 'Desparasitación', title: 'Pipeta antiparasitaria interna y externa', lastDate: '2026-09-15', freqDays: 90, dose: '1 pipeta según peso (4.5 kg)' },
-            { id: 'care-6', cat: 'Gael', type: 'Desparasitación', title: 'Pipeta antiparasitaria interna y externa', lastDate: '2026-09-15', freqDays: 90, dose: '1 pipeta según peso (4.8 kg)' },
             { id: 'care-7', cat: 'Enzo', type: 'Medicamento', title: 'Malta felina para control de bolas de pelo', lastDate: '2026-11-08', freqDays: 3, dose: '2 cm de pasta oral' }
         ];
 
@@ -1143,17 +1156,47 @@
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                     await signInWithCustomToken(auth, __initial_auth_token);
                 } else {
-                    await signInAnonymously(auth);
-                }
+                    const loginModal = document.getElementById('loginModal');
+            const loginError = document.getElementById('loginError');
+            const emailIn = document.getElementById('emailInput');
+            const passIn = document.getElementById('passwordInput');
 
-                onAuthStateChanged(auth, (user) => {
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    loginModal.classList.add('hidden');
                     currentUser = user;
-                    if (user) {
-                        isCloudActive = true;
-                        updateSyncIndicator('Nube sincronizada', 'bg-emerald-400');
-                        setupFirestoreListeners(user.uid);
-                    }
-                });
+                    isCloudActive = true;
+                    updateSyncIndicator('Nube Sincronizada', 'bg-emerald-400');
+                    setupFirestoreListeners(user.uid);
+                } else {
+                    loginModal.classList.remove('hidden');
+                    updateSyncIndicator('Esperando conexión', 'bg-amber-400');
+                }
+            });
+
+            document.getElementById('loginForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                try {
+                    await signInWithEmailAndPassword(auth, emailIn.value, passIn.value);
+                } catch (err) {
+                    loginError.textContent = "Error al entrar. Revisa el correo o la contraseña.";
+                    loginError.classList.remove('hidden');
+                }
+            });
+
+            document.getElementById('btnRegister').addEventListener('click', async () => {
+                if(!emailIn.value || !passIn.value) {
+                    loginError.textContent = "Escribe un correo y contraseña para crear la cuenta.";
+                    loginError.classList.remove('hidden');
+                    return;
+                }
+                try {
+                    await createUserWithEmailAndPassword(auth, emailIn.value, passIn.value);
+                } catch (err) {
+                    loginError.textContent = "Error. Asegúrate de que la contraseña tenga mínimo 6 letras/números.";
+                    loginError.classList.remove('hidden');
+                }
+            });
             } catch (err) {
                 console.warn("Operando con guardado local inmediato (verifica Authentication > Anónimo en Firebase):", err);
                 updateSyncIndicator('Guardado local activo', 'bg-emerald-400');
