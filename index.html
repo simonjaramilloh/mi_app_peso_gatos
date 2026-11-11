@@ -89,13 +89,17 @@
 
             <!-- Barra de herramientas superior -->
             <div class="flex items-center gap-2">
-                <button onclick="openProfileModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition" title="Configurar fecha de nacimiento y peso ideal">
+                <button onclick="openProfileModal()" id="btnProfileHeader" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition" title="Configurar fecha de nacimiento y peso ideal">
                     <i class="ph ph-cake text-sm"></i>
                     <span class="hidden sm:inline">Nacimiento y metas</span>
                 </button>
-                <button onclick="openDataModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition" title="Exportar, importar o datos de prueba">
+                <button onclick="openDataModal()" id="btnDataHeader" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition" title="Exportar, importar o datos de prueba">
                     <i class="ph ph-database text-sm"></i>
                     <span class="hidden sm:inline">Datos y respaldos</span>
+                </button>
+                <button onclick="openAuthModalOrSignOut()" id="btnSignOutHeader" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-rose-950/80 hover:bg-rose-900 text-rose-200 border border-rose-800/70 transition" title="Cerrar sesión o cambiar de cuenta">
+                    <i class="ph-bold ph-sign-out text-sm"></i>
+                    <span class="hidden sm:inline">Salir</span>
                 </button>
             </div>
         </div>
@@ -1247,6 +1251,10 @@
                 const passIn = document.getElementById('passwordInput');
 
                 onAuthStateChanged(auth, (user) => {
+                    // Elimina el bloqueo visual del modo lectura si existía de una sesión previa
+                    const prevStyle = document.getElementById('vetReadOnlyStyle');
+                    if (prevStyle) prevStyle.remove();
+
                     if (user) {
                         loginModal.classList.add('hidden');
                         currentUser = user;
@@ -1255,11 +1263,11 @@
                         // Si es el veterinario, carga el UID de simonjaramilloh12 y bloquea edición
                         if (user.email === 'simonjaramilloh25@gmail.com') {
                             updateSyncIndicator('Modo lectura - Veterinario', 'bg-blue-400');
-                            localStorage.removeItem(LOCAL_STORAGE_KEY); // Limpia datos viejos del navegador
+                            localStorage.removeItem(LOCAL_STORAGE_KEY);
                             setupFirestoreListeners('sRxu7dDip7YVSpryBeNnkO1I6Au2');
                             
-                            // Oculta todos los botones de guardar, editar, eliminar y "Hecho hoy"
-                            document.head.insertAdjacentHTML('beforeend', '<style>button[type="submit"], button[title="Eliminar"], button[title="Editar"], button[onclick^="markCareDoneToday"] { display: none !important; }</style>');
+                            // Oculta botones de edición e inputs de fecha rápida con un ID identificable
+                            document.head.insertAdjacentHTML('beforeend', '<style id="vetReadOnlyStyle">button[type="submit"], button[title="Eliminar"], button[title="Editar"], button[onclick^="markCareDoneToday"], #btnProfileHeader, #btnDataHeader { display: none !important; } #quickBirthEnzo, #quickBirthGael { pointer-events: none; }</style>');
                         } else {
                             updateSyncIndicator('Nube sincronizada (' + (user.email || 'activo') + ')', 'bg-emerald-400');
                             setupFirestoreListeners(user.uid);
@@ -1301,7 +1309,9 @@
                 window.openAuthModalOrSignOut = async function() {
                     if (currentUser) {
                         await signOut(auth);
-                        showToast("Sesión cerrada");
+                        emailIn.value = '';
+                        passIn.value = '';
+                        showToast("Sesión cerrada correctamente");
                     } else {
                         loginModal.classList.remove('hidden');
                     }
