@@ -485,7 +485,7 @@
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2 font-bold text-sm text-slate-900">
                             <span class="w-3 h-3 rounded-full bg-white border-2 border-slate-500"></span>
-                            Enzo • Persa Blanco
+                            Enzo • Persa blanco
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-3">
@@ -512,7 +512,7 @@
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2 font-bold text-sm text-white">
                             <span class="w-3 h-3 rounded-full bg-slate-950 border border-slate-400"></span>
-                            Gael • Persa Negro
+                            Gael • Persa negro
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-3">
@@ -522,13 +522,13 @@
                                 class="w-full rounded-lg border border-slate-700 px-2.5 py-1.5 text-xs font-bold text-white bg-slate-800 [color-scheme:dark]">
                         </div>
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-300 uppercase mb-1">Peso Ideal (kg)</label>
+                            <label class="block text-[11px] font-semibold text-slate-300 uppercase mb-1">Peso ideal (kg)</label>
                             <input type="number" id="idealGaelInput" step="0.05" min="1" max="15" required
                                 class="w-full rounded-lg border border-slate-700 px-3 py-1.5 text-xs font-bold text-white bg-slate-800">
                         </div>
                     </div>
                     <div>
-                        <label class="block text-[11px] font-semibold text-slate-300 uppercase mb-1">Notas del Perfil</label>
+                        <label class="block text-[11px] font-semibold text-slate-300 uppercase mb-1">Notas del perfil</label>
                         <input type="text" id="bioGaelInput" placeholder="Ej. Persa Negro, castrado"
                             class="w-full rounded-lg border border-slate-700 px-3 py-1.5 text-xs text-white bg-slate-800">
                     </div>
@@ -536,7 +536,7 @@
 
                 <div class="flex justify-end gap-2 pt-2">
                     <button type="button" onclick="closeProfileModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100">Cancelar</button>
-                    <button type="submit" class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-900 text-white hover:bg-slate-800">Guardar Cambios</button>
+                    <button type="submit" class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-900 text-white hover:bg-slate-800">Guardar cambios</button>
                 </div>
             </form>
         </div>
@@ -548,7 +548,7 @@
             <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                 <h3 class="font-bold text-base text-slate-900 flex items-center gap-2">
                     <i class="ph-bold ph-database text-lg text-slate-700"></i>
-                    Gestión de Datos y Respaldos
+                    Gestión de datos y respaldos
                 </h3>
                 <button onclick="closeDataModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
                     <i class="ph-bold ph-x text-lg"></i>
@@ -557,7 +557,7 @@
 
             <div class="space-y-3 text-xs text-slate-600">
                 <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
-                    <p class="font-bold text-slate-800">Exportar / Respaldar Historial</p>
+                    <p class="font-bold text-slate-800">Exportar / Respaldar historial</p>
                     <p>Descarga tus registros en formato CSV (para abrir en Excel o Google Sheets) o en archivo JSON completo para restaurarlo después.</p>
                     <div class="flex gap-2 pt-1">
                         <button onclick="exportCSV()" class="flex-1 py-2 px-3 rounded-lg bg-slate-900 text-white font-semibold hover:bg-slate-800 transition flex items-center justify-center gap-1.5">
@@ -570,19 +570,19 @@
                 </div>
 
                 <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
-                    <p class="font-bold text-slate-800">Restaurar desde Respaldo JSON</p>
+                    <p class="font-bold text-slate-800">Restaurar desde respaldo JSON</p>
                     <input type="file" id="importJsonInput" accept=".json" onchange="importJSONFile(event)" class="block w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-200 file:text-slate-800 hover:file:bg-slate-300 cursor-pointer">
                 </div>
 
                 <div class="p-3.5 rounded-xl bg-amber-50/70 border border-amber-200/80 space-y-2">
-                    <p class="font-bold text-amber-950">Datos de Prueba / Reinicio</p>
+                    <p class="font-bold text-amber-950">Datos de prueba / Reinicio</p>
                     <p class="text-amber-800">Puedes cargar mediciones de ejemplo para ver cómo lucen las gráficas de Enzo y Gael, o borrar todo para empezar desde cero.</p>
                     <div class="flex gap-2 pt-1">
                         <button onclick="loadSampleData(); closeDataModal();" class="flex-1 py-2 px-3 rounded-lg bg-amber-600 text-white font-semibold hover:bg-amber-700 transition">
-                            Cargar Ejemplo
+                            Cargar ejemplo
                         </button>
                         <button onclick="confirmClearAll()" class="flex-1 py-2 px-3 rounded-lg bg-rose-100 text-rose-700 font-semibold hover:bg-rose-200 transition">
-                            Borrar Todo
+                            Borrar todo
                         </button>
                     </div>
                 </div>
@@ -606,10 +606,19 @@
     <div id="toastContainer" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
     <!-- Application Logic & Firebase Cloud Sync -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, deleteDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    <script type="module">import { initializeApp } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, deleteDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDrxMxPNeswKXaUKdfqrDz8bxKRXErlDZE",
+            authDomain: "peso-gatos.firebaseapp.com",
+            projectId: "peso-gatos",
+            storageBucket: "peso-gatos.firebasestorage.app",
+            messagingSenderId: "491354086316",
+            appId: "1:491354086316:web:14f4b8af8f545f085e3809"
+        };
+        const app = initializeApp(firebaseConfig);
 
         // --- Global State ---
         let records = [];
@@ -746,20 +755,15 @@
         async function initStorage() {
             setDefaultDate();
 
-            try {
-                if (typeof __firebase_config !== 'undefined' && __firebase_config) {
-                    const firebaseConfig = JSON.parse(__firebase_config);
+                    try {
+                    // Se inicializa Firebase con la configuración declarada arriba
                     const app = initializeApp(firebaseConfig);
                     auth = getAuth(app);
                     db = getFirestore(app);
-
-                    // RULE 3: Authenticate FIRST before any Firestore listener
-                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                        await signInWithCustomToken(auth, __initial_auth_token);
-                    } else {
-                        await signInAnonymously(auth);
-                    }
-
+        
+                    // Autenticación anónima para habilitar acceso a Firestore
+                    await signInAnonymously(auth);
+        
                     onAuthStateChanged(auth, (user) => {
                         currentUser = user;
                         if (user) {
@@ -769,10 +773,9 @@
                         }
                     });
                     return;
+                } catch (err) {
+                    console.warn("Usando modo sin conexión / memoria local:", err);
                 }
-            } catch (err) {
-                console.warn("Usando modo sin conexión / memoria local:", err);
-            }
 
             // Fallback if Firebase env is not present
             updateSyncIndicator('Modo Local Activo', 'bg-emerald-400');
