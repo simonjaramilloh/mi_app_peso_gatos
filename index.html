@@ -1260,6 +1260,7 @@
                             // Ocultar botones de enviar para dejar la vista limpia
                             document.querySelectorAll('button[type="submit"]').forEach(btn => btn.classList.add('hidden'));
                             document.querySelectorAll('button[title="Eliminar"]').forEach(btn => btn.classList.add('hidden'));
+                            document.head.insertAdjacentHTML('beforeend', '<style>button[title="Eliminar"], button[title="Editar"], button[onclick^="markCareDoneToday"] { display: none !important; }</style>');
                         } else {
                             updateSyncIndicator('Nube sincronizada (' + (user.email || 'activo') + ')', 'bg-emerald-400');
                             setupFirestoreListeners(user.uid);
