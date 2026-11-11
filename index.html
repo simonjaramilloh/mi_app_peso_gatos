@@ -140,6 +140,10 @@
                     <i class="ph-bold ph-First-aid-kit text-sm"></i>
                     <span>Baño, uñas y medicamentos</span>
                 </button>
+                <button onclick="setSectionTab('vacunas')" id="sec-vacunas" class="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all text-slate-600 hover:bg-slate-100 whitespace-nowrap">
+                    <i class="ph-bold ph-syringe text-sm"></i>
+                    <span>Vacunas</span>
+                </button>
             </div>
         </div>
 
@@ -693,6 +697,99 @@
             </section>
         </div>
 
+        <!-- ================================================================== -->
+        <!-- MÓDULO 4: REGISTRO DE VACUNACIÓN Y LOTES                           -->
+        <!-- ================================================================== -->
+        <div id="module-vacunas" class="space-y-6">
+            <section class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
+                <div class="p-5 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3 bg-gradient-to-r from-emerald-900 to-emerald-800 text-white">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-emerald-300 border border-white/15">
+                            <i class="ph-fill ph-syringe text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-base text-white">Registro de vacunación</h3>
+                            <p class="text-xs text-emerald-100">Control de vacunas o medicamentos aplicados, lote y fecha de aplicación</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-5 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                    <!-- Formulario de vacunación -->
+                    <form id="vaccineForm" onsubmit="handleVaccineSubmit(event)" class="lg:col-span-4 bg-slate-50 p-4 rounded-2xl border border-slate-200/90 space-y-3.5">
+                        <div class="flex items-center justify-between">
+                            <h4 id="vaccineFormTitle" class="font-bold text-sm text-slate-900">Añadir nueva vacuna</h4>
+                            <button type="button" id="cancelVaccineEditBtn" onclick="resetVaccineForm()" class="hidden text-xs font-semibold text-rose-600 hover:underline">Cancelar</button>
+                        </div>
+                        <input type="hidden" id="editVaccineId" value="">
+
+                        <div class="grid grid-cols-2 gap-2.5">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Mascota</label>
+                                <select id="vaccineCatInput" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs font-bold text-slate-900 bg-white">
+                                    <option value="Enzo">Enzo (blanco)</option>
+                                    <option value="Gael">Gael (negro)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Fecha aplicada</label>
+                                <input type="date" id="vaccineDateInput" required class="w-full rounded-xl border border-slate-300 px-2.5 py-2 text-xs font-semibold text-slate-900 bg-white">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Vacuna o medicamento aplicado</label>
+                            <input type="text" id="vaccineNameInput" required placeholder="Ej. Triple felina, Rabia, Leucemia..." class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-900 bg-white">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2.5">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Lote / marca</label>
+                                <input type="text" id="vaccineLotInput" required placeholder="Ej. Lote A1234 - Zoetis" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-900 bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Próximo refuerzo</label>
+                                <input type="date" id="vaccineNextDateInput" class="w-full rounded-xl border border-slate-300 px-2.5 py-2 text-xs font-semibold text-slate-900 bg-white">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Veterinario / notas</label>
+                            <input type="text" id="vaccineNotesInput" placeholder="Ej. Sin reacciones adversas" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs text-slate-800 bg-white">
+                        </div>
+
+                        <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-sm transition flex items-center justify-center gap-1.5">
+                            <i class="ph-bold ph-syringe text-base"></i>
+                            <span id="vaccineSubmitText">Registrar vacuna</span>
+                        </button>
+                    </form>
+
+                    <!-- Tabla de vacunas -->
+                    <div class="lg:col-span-8 space-y-4">
+                        <div class="overflow-x-auto custom-scrollbar border border-slate-200/80 rounded-2xl">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50 text-xs font-bold text-slate-500 border-b border-slate-200">
+                                        <th class="py-3 px-3.5">Mascota</th>
+                                        <th class="py-3 px-3.5">Fecha</th>
+                                        <th class="py-3 px-3.5">Vacuna / medicamento</th>
+                                        <th class="py-3 px-3.5">Lote</th>
+                                        <th class="py-3 px-3.5">Próx. refuerzo</th>
+                                        <th class="py-3 px-3.5">Notas</th>
+                                        <th class="py-3 px-3.5 text-right">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="vaccineTableBody" class="divide-y divide-slate-100 text-xs sm:text-sm"></tbody>
+                            </table>
+                            <div id="emptyVaccineState" class="hidden py-8 px-4 text-center text-xs text-slate-400">
+                                No hay vacunas registradas para la mascota seleccionada.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
     </main>
 
     <!-- Modal: Configuración de nacimiento, perfiles y metas -->
@@ -973,9 +1070,10 @@
         let records = [];
         let bloodTests = [];
         let careItems = [];
+        let vaccineRecords = [];
 
         let activeViewFilter = 'all'; // 'all' | 'Enzo' | 'Gael'
-        let activeSectionTab = 'todos'; // 'todos' | 'peso' | 'hormonas' | 'cuidados'
+        let activeSectionTab = 'todos'; // 'todos' | 'peso' | 'hormonas' | 'cuidados' | 'vacunas'
         let chartRangeDays = 0;
         let weightChartInstance = null;
 
@@ -993,6 +1091,7 @@
                     records = structuredClone(INITIAL_DEMO_RECORDS);
                     bloodTests = structuredClone(INITIAL_BLOOD_TESTS);
                     careItems = structuredClone(INITIAL_CARE_ITEMS);
+                    vaccineRecords = [];
                     saveToLocalCache();
                     return;
                 }
@@ -1004,11 +1103,13 @@
                 records = Array.isArray(parsed.records) ? parsed.records : structuredClone(INITIAL_DEMO_RECORDS);
                 bloodTests = Array.isArray(parsed.bloodTests) ? parsed.bloodTests : structuredClone(INITIAL_BLOOD_TESTS);
                 careItems = Array.isArray(parsed.careItems) ? parsed.careItems : structuredClone(INITIAL_CARE_ITEMS);
+                vaccineRecords = Array.isArray(parsed.vaccineRecords) ? parsed.vaccineRecords : [];
             } catch (e) {
                 console.warn("Error leyendo caché local:", e);
                 records = structuredClone(INITIAL_DEMO_RECORDS);
                 bloodTests = structuredClone(INITIAL_BLOOD_TESTS);
                 careItems = structuredClone(INITIAL_CARE_ITEMS);
+                vaccineRecords = [];
             }
         }
 
@@ -1019,6 +1120,7 @@
                     records,
                     bloodTests,
                     careItems,
+                    vaccineRecords,
                     updatedAt: Date.now()
                 }));
             } catch (e) {
@@ -1099,6 +1201,7 @@
             document.getElementById('dateInput').value = today;
             document.getElementById('bloodDateInput').value = today;
             document.getElementById('careLastDateInput').value = today;
+            document.getElementById('vaccineDateInput').value = today;
         }
 
         function showToast(message, type = 'success') {
@@ -1285,6 +1388,22 @@
                     });
                 }
             }, () => {});
+
+            // 5. Registro de vacunas
+            const vacCol = collection(db, 'artifacts', appId, 'users', uid, 'vaccine_records');
+            onSnapshot(vacCol, (snapshot) => {
+                if (!snapshot.empty) {
+                    const loaded = [];
+                    snapshot.forEach((docSnap) => loaded.push(docSnap.data()));
+                    vaccineRecords = loaded;
+                    saveToLocalCache();
+                    renderAll();
+                } else if (vaccineRecords.length > 0) {
+                    vaccineRecords.forEach(v => {
+                        setDoc(doc(db, 'artifacts', appId, 'users', uid, 'vaccine_records', v.id), v).catch(() => {});
+                    });
+                }
+            }, () => {});
         }
 
         // --- Operaciones de guardado (Local + Nube) ---
@@ -1383,6 +1502,33 @@
             if (isCloudActive && currentUser && db) {
                 try {
                     await deleteDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'care_records', id));
+                } catch (e) {}
+            }
+        }
+
+        async function saveVaccineToStorage(item) {
+            const idx = vaccineRecords.findIndex(v => v.id === item.id);
+            if (idx >= 0) vaccineRecords[idx] = item;
+            else vaccineRecords.push(item);
+
+            saveToLocalCache();
+            renderAll();
+
+            if (isCloudActive && currentUser && db) {
+                try {
+                    await setDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'vaccine_records', item.id), item);
+                } catch (e) {}
+            }
+        }
+
+        async function deleteVaccineFromStorage(id) {
+            vaccineRecords = vaccineRecords.filter(v => v.id !== id);
+            saveToLocalCache();
+            renderAll();
+
+            if (isCloudActive && currentUser && db) {
+                try {
+                    await deleteDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'vaccine_records', id));
                 } catch (e) {}
             }
         }
@@ -1930,12 +2076,72 @@
             }).join('');
         }
 
+        function renderVaccines() {
+            const tbody = document.getElementById('vaccineTableBody');
+            const emptyState = document.getElementById('emptyVaccineState');
+            if (!tbody || !emptyState) return;
+
+            const filtered = [...vaccineRecords]
+                .filter(v => activeViewFilter === 'all' || v.cat === activeViewFilter)
+                .sort((a, b) => b.date.localeCompare(a.date));
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            tbody.innerHTML = filtered.map(item => {
+                const isEnzo = item.cat === 'Enzo';
+                const badgeClass = isEnzo
+                    ? 'bg-white text-slate-900 border-slate-300'
+                    : 'bg-slate-900 text-white border-slate-800';
+
+                let nextDateHtml = '<span class="text-slate-300">—</span>';
+                if (item.nextDate) {
+                    const today = new Date().toISOString().split('T')[0];
+                    if (item.nextDate < today) {
+                        nextDateHtml = `<span class="px-2 py-0.5 rounded-md text-[11px] font-bold bg-rose-100 text-rose-800">Vencida: ${formatShortDate(item.nextDate)}</span>`;
+                    } else {
+                        nextDateHtml = `<span class="px-2 py-0.5 rounded-md text-[11px] font-bold bg-emerald-50 text-emerald-700">${formatShortDate(item.nextDate)}</span>`;
+                    }
+                }
+
+                return `
+                    <tr class="hover:bg-slate-50/90 transition">
+                        <td class="py-3 px-3.5 whitespace-nowrap">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold border ${badgeClass}">
+                                ${item.cat}
+                            </span>
+                        </td>
+                        <td class="py-3 px-3.5 whitespace-nowrap text-xs font-semibold text-slate-700">${formatReadableDate(item.date)}</td>
+                        <td class="py-3 px-3.5 font-bold text-slate-900">${escapeHtml(item.name)}</td>
+                        <td class="py-3 px-3.5 text-xs text-slate-700 font-semibold">${item.lot ? escapeHtml(item.lot) : '<span class="text-slate-300">—</span>'}</td>
+                        <td class="py-3 px-3.5 whitespace-nowrap">${nextDateHtml}</td>
+                        <td class="py-3 px-3.5 text-xs text-slate-600 max-w-[160px] truncate" title="${escapeHtml(item.notes || '')}">
+                            ${item.notes ? escapeHtml(item.notes) : '<span class="text-slate-300">—</span>'}
+                        </td>
+                        <td class="py-3 px-3.5 whitespace-nowrap text-right">
+                            <button onclick="editVaccineRecord('${item.id}')" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100" title="Editar">
+                                <i class="ph-bold ph-pencil-simple text-sm"></i>
+                            </button>
+                            <button onclick="promptDeleteVaccine('${item.id}')" class="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50" title="Eliminar">
+                                <i class="ph-bold ph-trash text-sm"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
         function renderAll() {
             renderSummaryCards();
             renderChart();
             renderTable();
             renderBloodTable();
             renderCareCatalog();
+            renderVaccines();
         }
 
         // --- Utilidades de formato ---
@@ -1964,7 +2170,7 @@
         // --- Eventos de interfaz ---
         window.setSectionTab = function(tab) {
             activeSectionTab = tab;
-            ['todos', 'peso', 'hormonas', 'cuidados'].forEach(t => {
+            ['todos', 'peso', 'hormonas', 'cuidados', 'vacunas'].forEach(t => {
                 const btn = document.getElementById(`sec-${t}`);
                 if (!btn) return;
                 if (t === tab) {
@@ -1977,10 +2183,12 @@
             const modPeso = document.getElementById('module-peso');
             const modHormonas = document.getElementById('module-hormonas');
             const modCuidados = document.getElementById('module-cuidados');
+            const modVacunas = document.getElementById('module-vacunas');
 
             modPeso.classList.toggle('hidden', tab !== 'todos' && tab !== 'peso');
             modHormonas.classList.toggle('hidden', tab !== 'todos' && tab !== 'hormonas');
             modCuidados.classList.toggle('hidden', tab !== 'todos' && tab !== 'cuidados');
+            modVacunas.classList.toggle('hidden', tab !== 'todos' && tab !== 'vacunas');
             if (tab === 'todos' || tab === 'peso') renderChart();
         };
 
@@ -1998,6 +2206,7 @@
                 window.selectFormCat(filter);
                 document.getElementById('bloodCatInput').value = filter;
                 document.getElementById('careCatInput').value = filter;
+                document.getElementById('vaccineCatInput').value = filter;
             }
             renderAll();
         };
@@ -2223,6 +2432,61 @@
             showToast(`¡${item.type} de ${item.cat} registrado con fecha de hoy!`);
         };
 
+        // --- Envío y edición de Vacunas ---
+        window.handleVaccineSubmit = async function(e) {
+            e.preventDefault();
+            const editId = document.getElementById('editVaccineId').value;
+            const cat = document.getElementById('vaccineCatInput').value;
+            const date = document.getElementById('vaccineDateInput').value;
+            const name = document.getElementById('vaccineNameInput').value.trim();
+            const lot = document.getElementById('vaccineLotInput').value.trim();
+            const nextDate = document.getElementById('vaccineNextDateInput').value;
+            const notes = document.getElementById('vaccineNotesInput').value.trim();
+
+            const item = {
+                id: editId || `v-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+                cat,
+                date,
+                name,
+                lot,
+                nextDate,
+                notes,
+                timestamp: Date.now()
+            };
+
+            await saveVaccineToStorage(item);
+            showToast(editId ? `Vacuna de ${cat} actualizada` : `Vacuna registrada para ${cat}`);
+            window.resetVaccineForm();
+        };
+
+        window.resetVaccineForm = function() {
+            document.getElementById('editVaccineId').value = '';
+            document.getElementById('vaccineNameInput').value = '';
+            document.getElementById('vaccineLotInput').value = '';
+            document.getElementById('vaccineNextDateInput').value = '';
+            document.getElementById('vaccineNotesInput').value = '';
+            document.getElementById('vaccineDateInput').value = new Date().toISOString().split('T')[0];
+            document.getElementById('vaccineFormTitle').textContent = 'Añadir nueva vacuna';
+            document.getElementById('vaccineSubmitText').textContent = 'Registrar vacuna';
+            document.getElementById('cancelVaccineEditBtn').classList.add('hidden');
+        };
+
+        window.editVaccineRecord = function(id) {
+            const item = vaccineRecords.find(v => v.id === id);
+            if (!item) return;
+            document.getElementById('editVaccineId').value = item.id;
+            document.getElementById('vaccineCatInput').value = item.cat;
+            document.getElementById('vaccineDateInput').value = item.date;
+            document.getElementById('vaccineNameInput').value = item.name;
+            document.getElementById('vaccineLotInput').value = item.lot || '';
+            document.getElementById('vaccineNextDateInput').value = item.nextDate || '';
+            document.getElementById('vaccineNotesInput').value = item.notes || '';
+            document.getElementById('vaccineFormTitle').textContent = `Editando vacuna de ${item.cat}`;
+            document.getElementById('vaccineSubmitText').textContent = 'Actualizar vacuna';
+            document.getElementById('cancelVaccineEditBtn').classList.remove('hidden');
+            document.getElementById('vaccineForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        };
+
         // --- Modal de confirmación ---
         let pendingConfirmAction = null;
         function openConfirmModal(title, message, onConfirm) {
@@ -2277,6 +2541,19 @@
                 async () => {
                     await deleteCareFromStorage(id);
                     showToast("Elemento eliminado del catálogo");
+                }
+            );
+        };
+
+        window.promptDeleteVaccine = function(id) {
+            const item = vaccineRecords.find(v => v.id === id);
+            if (!item) return;
+            openConfirmModal(
+                `¿Eliminar vacuna de ${item.cat}?`,
+                `Se borrará el registro de "${item.name}" (Lote: ${item.lot || 'N/A'}).`,
+                async () => {
+                    await deleteVaccineFromStorage(id);
+                    showToast("Vacuna eliminada");
                 }
             );
         };
