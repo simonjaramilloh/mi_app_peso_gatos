@@ -2661,7 +2661,8 @@
                 profiles,
                 records,
                 bloodTests,
-                careItems
+                careItems,
+                vaccineRecords
             };
             const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
@@ -2684,12 +2685,14 @@
                     if (Array.isArray(data.records)) records = data.records;
                     if (Array.isArray(data.bloodTests)) bloodTests = data.bloodTests;
                     if (Array.isArray(data.careItems)) careItems = data.careItems;
+                    if (Array.isArray(data.vaccineRecords)) vaccineRecords = data.vaccineRecords;
                     saveToLocalCache();
                     await persistProfilesToCloud();
                     if (isCloudActive && currentUser && db) {
                         for (const r of records) await setDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'weight_records', r.id), r).catch(() => {});
                         for (const b of bloodTests) await setDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'blood_records', b.id), b).catch(() => {});
                         for (const c of careItems) await setDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'care_records', c.id), c).catch(() => {});
+                        for (const v of vaccineRecords) await setDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'vaccine_records', v.id), v).catch(() => {});
                     }
                     renderAll();
                     closeDataModal();
