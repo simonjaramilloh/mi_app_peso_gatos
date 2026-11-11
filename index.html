@@ -861,7 +861,7 @@
     <!-- Lógica de la aplicación y sincronización con Firebase -->
     <script type="module">
         import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, deleteDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // ============================================================================
@@ -1145,8 +1145,8 @@
             renderAll();
 
             try {
-                // Asegura que Firebase use la variable global firebaseConfig
-                const app = initializeApp(firebaseConfig);
+                // Usa USER_FIREBASE_CONFIG (que estaba declarado arriba) sin duplicar la app
+                const app = getApps().length > 0 ? getApp() : initializeApp(USER_FIREBASE_CONFIG);
                 auth = getAuth(app);
                 db = getFirestore(app);
 
@@ -1160,37 +1160,50 @@
                         loginModal.classList.add('hidden');
                         currentUser = user;
                         isCloudActive = true;
-                        updateSyncIndicator('Nube Sincronizada', 'bg-emerald-400');
+                        updateSyncIndicator('Nube sincronizada (' + (user.email || 'activo') + ')', 'bg-emerald-400');
                         setupFirestoreListeners(user.uid);
                     } else {
+                        currentUser = null;
+                        isCloudActive = false;
                         loginModal.classList.remove('hidden');
-                        updateSyncIndicator('Esperando conexión', 'bg-amber-400');
+                        updateSyncIndicator('Iniciar sesión requerido', 'bg-amber-400');
                     }
                 });
 
                 document.getElementById('loginForm').addEventListener('submit', async (e) => {
                     e.preventDefault();
+                    loginError.classList.add('hidden');
                     try {
-                        await signInWithEmailAndPassword(auth, emailIn.value, passIn.value);
+                        await signInWithEmailAndPassword(auth, emailIn.value.trim(), passIn.value);
                     } catch (err) {
-                        loginError.textContent = "Error al entrar. Revisa el correo o la contraseña.";
+                        loginError.textContent = "Error al entrar: " + (err.code || "revisa el correo o la contraseña.");
                         loginError.classList.remove('hidden');
                     }
                 });
 
                 document.getElementById('btnRegister').addEventListener('click', async () => {
-                    if(!emailIn.value || !passIn.value) {
+                    loginError.classList.add('hidden');
+                    if (!emailIn.value.trim() || !passIn.value) {
                         loginError.textContent = "Escribe un correo y contraseña para crear la cuenta.";
                         loginError.classList.remove('hidden');
                         return;
                     }
                     try {
-                        await createUserWithEmailAndPassword(auth, emailIn.value, passIn.value);
+                        await createUserWithEmailAndPassword(auth, emailIn.value.trim(), passIn.value);
                     } catch (err) {
-                        loginError.textContent = "Error. Asegúrate de que la contraseña tenga mínimo 6 letras/números.";
+                        loginError.textContent = "No se pudo crear: " + (err.code || "mínimo 6 caracteres o el correo ya existe.");
                         loginError.classList.remove('hidden');
                     }
                 });
+
+                window.openAuthModalOrSignOut = async function() {
+                    if (currentUser) {
+                        await signOut(auth);
+                        showToast("Sesión cerrada");
+                    } else {
+                        loginModal.classList.remove('hidden');
+                    }
+                };
 
             } catch (err) {
                 console.warn("Operando con guardado local inmediato:", err);
@@ -2397,6 +2410,11 @@
                     if (Array.isArray(data.careItems)) careItems = data.careItems;
                     saveToLocalCache();
                     await persistProfilesToCloud();
+                    if (isCloudActive && currentUser && db) {
+                        for (const r of records) await setDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'weight_records', r.id), r).catch(() => {});
+                        for (const b of bloodTests) await setDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'blood_records', b.id), b).catch(() => {});
+                        for (const c of careItems) await setDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'care_records', c.id), c).catch(() => {});
+                    }
                     renderAll();
                     closeDataModal();
                     showToast("Respaldo completo restaurado");
