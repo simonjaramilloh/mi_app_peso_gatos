@@ -6,7 +6,8 @@
     <meta name="theme-color" content="#0f172a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Enzo & Gael • Control de peso felino</title>
+    <link rel="manifest" href="./manifest.json">
+    <title>Enzo y Gael • Catálogo de salud, peso y cuidados</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -55,17 +56,17 @@
             background: #94a3b8;
         }
         @keyframes slideUp {
-            from { transform: translateY(12px); opacity: 0; }
+            from { transform: translateY(10px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
         .animate-slide-up {
-            animation: slideUp 0.25s ease-out forwards;
+            animation: slideUp 0.22s ease-out forwards;
         }
     </style>
 </head>
 <body class="min-h-full text-slate-800 pb-20 md:pb-12">
 
-    <!-- Top Header / Navigation -->
+    <!-- Encabezado principal -->
     <header class="sticky top-0 z-30 bg-slate-900 text-white shadow-lg border-b border-slate-800">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-3">
             <div class="flex items-center gap-3">
@@ -75,60 +76,82 @@
                     </div>
                 </div>
                 <div>
-                    <div class="flex items-center gap-2">
-                        <h1 class="font-bold text-lg tracking-tight leading-none">Enzo & Gael</h1>
-                        <span id="syncStatusBadge" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-slate-800 text-slate-300 border border-slate-700">
-                            <span id="syncDot" class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
-                            <span id="syncText">Iniciando...</span>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <h1 class="font-bold text-lg tracking-tight leading-none">Enzo y Gael</h1>
+                        <span id="syncStatusBadge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-slate-800 text-slate-300 border border-slate-700">
+                            <span id="syncDot" class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                            <span id="syncText">Guardado activo</span>
                         </span>
                     </div>
-                    <p class="text-xs text-slate-400 mt-0.5">Bitácora de Peso y Edad • Gatos Persa</p>
+                    <p class="text-xs text-slate-400 mt-0.5">Catálogo virtual de peso, hormonas y cuidados • Gatos persa</p>
                 </div>
             </div>
 
-            <!-- Action Toolbar -->
+            <!-- Barra de herramientas superior -->
             <div class="flex items-center gap-2">
-                <button onclick="openProfileModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition" title="Configurar Fecha de Nacimiento y Peso Ideal">
+                <button onclick="openProfileModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition" title="Configurar fecha de nacimiento y peso ideal">
                     <i class="ph ph-cake text-sm"></i>
-                    <span class="hidden sm:inline">Nacimiento y Metas</span>
+                    <span class="hidden sm:inline">Nacimiento y metas</span>
                 </button>
-                <button onclick="openDataModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition" title="Exportar, Importar o Datos de Prueba">
+                <button onclick="openDataModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition" title="Exportar, importar o datos de prueba">
                     <i class="ph ph-database text-sm"></i>
-                    <span class="hidden sm:inline">Datos / Exportar</span>
+                    <span class="hidden sm:inline">Datos y respaldos</span>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- Main Container -->
+    <!-- Contenedor principal -->
     <main class="max-w-6xl mx-auto px-4 sm:px-6 pt-5 space-y-6">
 
-        <!-- View Mode Tabs (Enzo / Gael / Ambos) -->
-        <div class="bg-white p-1.5 rounded-2xl shadow-sm border border-slate-200/80 flex items-center justify-between gap-1 sm:w-fit">
-            <button onclick="setViewFilter('all')" id="tab-all" class="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-slate-900 text-white shadow-sm">
-                <i class="ph-fill ph-chart-line-up text-base"></i>
-                <span>Ambos Persas</span>
-            </button>
-            <button onclick="setViewFilter('Enzo')" id="tab-Enzo" class="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-600 hover:bg-slate-100">
-                <span class="w-3 h-3 rounded-full bg-white border-2 border-slate-400 shadow-xs"></span>
-                <span>Enzo</span>
-            </button>
-            <button onclick="setViewFilter('Gael')" id="tab-Gael" class="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-600 hover:bg-slate-100">
-                <span class="w-3 h-3 rounded-full bg-slate-950 border border-slate-700"></span>
-                <span>Gael</span>
-            </button>
+        <!-- Barra de filtros de mascota y navegación de módulos -->
+        <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+            <!-- Filtro por gato -->
+            <div class="bg-white p-1.5 rounded-2xl shadow-sm border border-slate-200/80 flex items-center justify-between gap-1">
+                <button onclick="setViewFilter('all')" id="tab-all" class="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-slate-900 text-white shadow-sm">
+                    <i class="ph-fill ph-paw-print text-base"></i>
+                    <span>Ambos gatos</span>
+                </button>
+                <button onclick="setViewFilter('Enzo')" id="tab-Enzo" class="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-600 hover:bg-slate-100">
+                    <span class="w-3 h-3 rounded-full bg-white border-2 border-slate-400 shadow-xs"></span>
+                    <span>Enzo</span>
+                </button>
+                <button onclick="setViewFilter('Gael')" id="tab-Gael" class="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-600 hover:bg-slate-100">
+                    <span class="w-3 h-3 rounded-full bg-slate-950 border border-slate-700"></span>
+                    <span>Gael</span>
+                </button>
+            </div>
+
+            <!-- Selector de sección del catálogo -->
+            <div class="bg-white p-1.5 rounded-2xl shadow-sm border border-slate-200/80 flex items-center gap-1 overflow-x-auto">
+                <button onclick="setSectionTab('todos')" id="sec-todos" class="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all bg-slate-900 text-white shadow-sm whitespace-nowrap">
+                    <i class="ph-bold ph-squares-four text-sm"></i>
+                    <span>Vista completa</span>
+                </button>
+                <button onclick="setSectionTab('peso')" id="sec-peso" class="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all text-slate-600 hover:bg-slate-100 whitespace-nowrap">
+                    <i class="ph-bold ph-scales text-sm"></i>
+                    <span>Control de peso</span>
+                </button>
+                <button onclick="setSectionTab('hormonas')" id="sec-hormonas" class="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all text-slate-600 hover:bg-slate-100 whitespace-nowrap">
+                    <i class="ph-bold ph-flask text-sm"></i>
+                    <span>Sangre y hormonas</span>
+                </button>
+                <button onclick="setSectionTab('cuidados')" id="sec-cuidados" class="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all text-slate-600 hover:bg-slate-100 whitespace-nowrap">
+                    <i class="ph-bold ph-First-aid-kit text-sm"></i>
+                    <span>Baño, uñas y medicamentos</span>
+                </button>
+            </div>
         </div>
 
-        <!-- Cat Summary & Age Cards Grid -->
+        <!-- Tarjetas de perfil, peso y edad de Enzo y Gael -->
         <section class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6" id="summaryCardsContainer">
-            <!-- Enzo Card (White Persian / Pearl Identity) -->
+            <!-- Tarjeta de Enzo (Persa blanco) -->
             <div id="card-Enzo" class="bg-white rounded-2xl p-5 shadow-sm border-2 border-slate-200 relative overflow-hidden transition-all">
                 <div class="absolute top-0 right-0 w-36 h-36 bg-gradient-to-bl from-slate-100 via-slate-50 to-transparent rounded-bl-full -z-0"></div>
                 <div class="relative z-10">
                     <div class="flex items-start justify-between gap-3">
                         <div class="flex items-center gap-3">
                             <div class="w-12 h-12 rounded-2xl bg-white text-slate-700 flex items-center justify-center border-2 border-slate-300 shadow-sm">
-                                <!-- Custom SVG Fluffy Persian Cat Avatar for Enzo (White) -->
                                 <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                                     <path fill="#f8fafc" d="M12 3c-1.5 0-2.8.6-3.8 1.5L5 2v6.5C4.3 9.6 4 10.8 4 12c0 4.4 3.6 8 8 8s8-3.6 8-8c0-1.2-.3-2.4-1-3.5V2l-3.2 2.5C14.8 3.6 13.5 3 12 3z"/>
                                     <circle cx="9" cy="12" r="1.3" fill="#334155" stroke="none"/>
@@ -139,42 +162,43 @@
                             <div>
                                 <div class="flex items-center gap-2 flex-wrap">
                                     <h2 class="text-lg font-extrabold text-slate-900">Enzo</h2>
-                                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 text-[11px] font-bold rounded-full bg-slate-100 text-slate-800 border border-slate-300 shadow-2xs">
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 text-[11px] font-bold rounded-full bg-slate-100 text-slate-800 border border-slate-300">
                                         <span class="w-2 h-2 rounded-full bg-white border border-slate-400"></span>
-                                        Persa Blanco
+                                        Persa blanco
                                     </span>
                                 </div>
                                 <p id="enzo-subtitle" class="text-xs text-slate-500 mt-0.5">Meta ideal: 4.50 kg</p>
                             </div>
                         </div>
-                        <button onclick="quickSelectCat('Enzo')" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 border border-slate-300 text-xs font-bold shadow-2xs transition flex items-center gap-1">
+                        <button onclick="quickSelectCat('Enzo')" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 border border-slate-300 text-xs font-bold transition flex items-center gap-1">
                             <i class="ph-bold ph-plus"></i> Pesar
                         </button>
                     </div>
 
-                    <!-- Live Age & Birthday Section for Enzo -->
+                    <!-- Edad en vivo de Enzo -->
                     <div class="mt-4 p-3 rounded-xl bg-slate-50 border border-slate-200/90 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-2.5">
-                            <div class="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-700 shadow-2xs">
+                            <div class="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-700">
                                 <i class="ph-fill ph-cake text-base"></i>
                             </div>
                             <div>
                                 <div class="flex items-center gap-1.5">
-                                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Edad Actual</span>
-                                    <button onclick="openProfileModal()" class="text-[10px] font-semibold text-slate-500 hover:text-slate-900 underline">Editar fecha</button>
+                                    <span class="text-[11px] font-bold text-slate-500">Edad actual</span>
+                                    <button onclick="openProfileModal()" class="text-[11px] font-semibold text-slate-500 hover:text-slate-900 underline">Cambiar fecha</button>
                                 </div>
                                 <p id="enzo-exact-age" class="text-xs sm:text-sm font-extrabold text-slate-900">--</p>
                             </div>
                         </div>
                         <div class="text-right">
                             <span id="enzo-days-lived" class="text-[11px] font-bold text-slate-700 block">-- días de vida</span>
-                            <span id="enzo-next-bday" class="text-[10px] text-slate-500 block">Nac: --</span>
+                            <span id="enzo-next-bday" class="text-[10px] text-slate-500 block">Nacimiento: --</span>
                         </div>
                     </div>
 
+                    <!-- Indicadores de peso y próximos cuidados de Enzo -->
                     <div class="mt-4 grid grid-cols-3 gap-3 pt-3.5 border-t border-slate-100">
                         <div>
-                            <span class="text-[11px] font-medium text-slate-400 uppercase tracking-wider block">Peso Actual</span>
+                            <span class="text-[11px] font-semibold text-slate-400 block">Peso actual</span>
                             <div class="flex items-baseline gap-1 mt-0.5">
                                 <span id="enzo-current-weight" class="text-2xl sm:text-3xl font-extrabold text-slate-900">--</span>
                                 <span class="text-xs font-semibold text-slate-500">kg</span>
@@ -183,15 +207,15 @@
                         </div>
 
                         <div>
-                            <span class="text-[11px] font-medium text-slate-400 uppercase tracking-wider block">Último Cambio</span>
+                            <span class="text-[11px] font-semibold text-slate-400 block">Último cambio</span>
                             <div id="enzo-delta-badge" class="mt-1 inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-600">
                                 <span>--</span>
                             </div>
-                            <span id="enzo-delta-pct" class="text-[11px] text-slate-400 block mt-1">vs toma previa</span>
+                            <span id="enzo-delta-pct" class="text-[11px] text-slate-400 block mt-1">Respecto al anterior</span>
                         </div>
 
                         <div>
-                            <span class="text-[11px] font-medium text-slate-400 uppercase tracking-wider block">Promedio / Meta</span>
+                            <span class="text-[11px] font-semibold text-slate-400 block">Promedio y meta</span>
                             <div class="mt-1 text-sm font-bold text-slate-700" id="enzo-avg-weight">-- kg</div>
                             <span id="enzo-ideal-diff" class="text-[11px] text-slate-600 font-medium block mt-0.5">Meta: 4.50 kg</span>
                         </div>
@@ -199,14 +223,13 @@
                 </div>
             </div>
 
-            <!-- Gael Card (Black Persian / Obsidian Identity) -->
+            <!-- Tarjeta de Gael (Persa negro) -->
             <div id="card-Gael" class="bg-slate-900 text-white rounded-2xl p-5 shadow-md border-2 border-slate-800 relative overflow-hidden transition-all">
                 <div class="absolute top-0 right-0 w-36 h-36 bg-gradient-to-bl from-slate-800/80 via-slate-800/20 to-transparent rounded-bl-full -z-0"></div>
                 <div class="relative z-10">
                     <div class="flex items-start justify-between gap-3">
                         <div class="flex items-center gap-3">
                             <div class="w-12 h-12 rounded-2xl bg-slate-950 text-white flex items-center justify-center border-2 border-slate-700 shadow-sm">
-                                <!-- Custom SVG Fluffy Persian Cat Avatar for Gael (Black) -->
                                 <svg class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M12 3c-1.5 0-2.8.6-3.8 1.5L5 2v6.5C4.3 9.6 4 10.8 4 12c0 4.4 3.6 8 8 8s8-3.6 8-8c0-1.2-.3-2.4-1-3.5V2l-3.2 2.5C14.8 3.6 13.5 3 12 3z"/>
                                     <circle cx="9" cy="12" r="1.4" fill="#fbbf24"/>
@@ -219,7 +242,7 @@
                                     <h2 class="text-lg font-extrabold text-white">Gael</h2>
                                     <span class="inline-flex items-center gap-1 px-2.5 py-0.5 text-[11px] font-bold rounded-full bg-slate-950 text-slate-200 border border-slate-700">
                                         <span class="w-2 h-2 rounded-full bg-slate-950 border border-slate-400"></span>
-                                        Persa Negro
+                                        Persa negro
                                     </span>
                                 </div>
                                 <p id="gael-subtitle" class="text-xs text-slate-400 mt-0.5">Meta ideal: 4.80 kg</p>
@@ -230,7 +253,7 @@
                         </button>
                     </div>
 
-                    <!-- Live Age & Birthday Section for Gael -->
+                    <!-- Edad en vivo de Gael -->
                     <div class="mt-4 p-3 rounded-xl bg-slate-800/80 border border-slate-700/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-2.5">
                             <div class="w-8 h-8 rounded-lg bg-slate-950 border border-slate-700 flex items-center justify-center text-amber-400">
@@ -238,21 +261,21 @@
                             </div>
                             <div>
                                 <div class="flex items-center gap-1.5">
-                                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Edad Actual</span>
-                                    <button onclick="openProfileModal()" class="text-[10px] font-semibold text-slate-300 hover:text-white underline">Editar fecha</button>
+                                    <span class="text-[11px] font-bold text-slate-300">Edad actual</span>
+                                    <button onclick="openProfileModal()" class="text-[11px] font-semibold text-slate-300 hover:text-white underline">Cambiar fecha</button>
                                 </div>
                                 <p id="gael-exact-age" class="text-xs sm:text-sm font-extrabold text-white">--</p>
                             </div>
                         </div>
                         <div class="text-right">
                             <span id="gael-days-lived" class="text-[11px] font-bold text-slate-200 block">-- días de vida</span>
-                            <span id="gael-next-bday" class="text-[10px] text-slate-400 block">Nac: --</span>
+                            <span id="gael-next-bday" class="text-[10px] text-slate-400 block">Nacimiento: --</span>
                         </div>
                     </div>
 
                     <div class="mt-4 grid grid-cols-3 gap-3 pt-3.5 border-t border-slate-800">
                         <div>
-                            <span class="text-[11px] font-medium text-slate-400 uppercase tracking-wider block">Peso Actual</span>
+                            <span class="text-[11px] font-semibold text-slate-400 block">Peso actual</span>
                             <div class="flex items-baseline gap-1 mt-0.5">
                                 <span id="gael-current-weight" class="text-2xl sm:text-3xl font-extrabold text-white">--</span>
                                 <span class="text-xs font-semibold text-slate-400">kg</span>
@@ -261,15 +284,15 @@
                         </div>
 
                         <div>
-                            <span class="text-[11px] font-medium text-slate-400 uppercase tracking-wider block">Último Cambio</span>
+                            <span class="text-[11px] font-semibold text-slate-400 block">Último cambio</span>
                             <div id="gael-delta-badge" class="mt-1 inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-bold bg-slate-800 text-slate-300">
                                 <span>--</span>
                             </div>
-                            <span id="gael-delta-pct" class="text-[11px] text-slate-400 block mt-1">vs toma previa</span>
+                            <span id="gael-delta-pct" class="text-[11px] text-slate-400 block mt-1">Respecto al anterior</span>
                         </div>
 
                         <div>
-                            <span class="text-[11px] font-medium text-slate-400 uppercase tracking-wider block">Promedio / Meta</span>
+                            <span class="text-[11px] font-semibold text-slate-400 block">Promedio y meta</span>
                             <div class="mt-1 text-sm font-bold text-slate-200" id="gael-avg-weight">-- kg</div>
                             <span id="gael-ideal-diff" class="text-[11px] text-slate-300 font-medium block mt-0.5">Meta: 4.80 kg</span>
                         </div>
@@ -278,27 +301,27 @@
             </div>
         </section>
 
-        <!-- Dedicated Birthdate & Age Quick Configuration Bar -->
+        <!-- Barra rápida para editar fechas de nacimiento -->
         <section class="bg-white rounded-2xl p-4 sm:px-5 shadow-sm border border-slate-200/80 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-800 flex items-center justify-center border border-slate-200 shrink-0">
                     <i class="ph-fill ph-calendar-heart text-xl"></i>
                 </div>
                 <div>
-                    <h3 class="text-sm font-bold text-slate-900">Fechas de Nacimiento y Cálculo de Edad</h3>
-                    <p class="text-xs text-slate-500">Configura el nacimiento de Enzo y Gael para actualizar su edad día a día automáticamente.</p>
+                    <h3 class="text-sm font-bold text-slate-900">Fechas de nacimiento y cálculo de edad</h3>
+                    <p class="text-xs text-slate-500">Selecciona la fecha de nacimiento de Enzo y Gael; queda guardada automáticamente en el dispositivo y en la nube.</p>
                 </div>
             </div>
 
             <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
-                <div class="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200 flex-1 sm:flex-initial">
+                <div class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 flex-1 sm:flex-initial">
                     <span class="w-2.5 h-2.5 rounded-full bg-white border-2 border-slate-400"></span>
                     <label for="quickBirthEnzo" class="text-xs font-bold text-slate-700">Enzo:</label>
                     <input type="date" id="quickBirthEnzo" onchange="handleQuickBirthChange('Enzo', this.value)"
                         class="bg-transparent text-xs font-semibold text-slate-900 focus:outline-none cursor-pointer">
                 </div>
 
-                <div class="flex items-center gap-2 bg-slate-900 text-white px-3 py-1.5 rounded-xl border border-slate-800 flex-1 sm:flex-initial">
+                <div class="flex items-center gap-2 bg-slate-900 text-white px-3 py-2 rounded-xl border border-slate-800 flex-1 sm:flex-initial">
                     <span class="w-2.5 h-2.5 rounded-full bg-slate-950 border border-slate-400"></span>
                     <label for="quickBirthGael" class="text-xs font-bold text-slate-200">Gael:</label>
                     <input type="date" id="quickBirthGael" onchange="handleQuickBirthChange('Gael', this.value)"
@@ -307,172 +330,378 @@
             </div>
         </section>
 
-        <!-- Main Workspace Grid: Form on Left, Chart on Right -->
-        <section class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            
-            <!-- Weight Entry Form Card (4 columns on desktop) -->
-            <div id="weightFormContainer" class="lg:col-span-4 bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center">
-                            <i class="ph-bold ph-scales text-lg"></i>
+        <!-- ================================================================== -->
+        <!-- MÓDULO 1: CONTROL DE PESO Y GRÁFICA DE EVOLUCIÓN                   -->
+        <!-- ================================================================== -->
+        <div id="module-peso" class="space-y-6">
+            <section class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <!-- Formulario de registro de peso -->
+                <div id="weightFormContainer" class="lg:col-span-4 bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center">
+                                <i class="ph-bold ph-scales text-lg"></i>
+                            </div>
+                            <h3 id="formTitle" class="font-bold text-base text-slate-900">Registrar nuevo peso</h3>
                         </div>
-                        <h3 id="formTitle" class="font-bold text-base text-slate-900">Registrar Nuevo Peso</h3>
-                    </div>
-                    <button id="cancelEditBtn" onclick="resetForm()" class="hidden text-xs font-semibold text-rose-600 hover:text-rose-700 px-2 py-1 rounded-lg hover:bg-rose-50 transition">
-                        Cancelar edición
-                    </button>
-                </div>
-
-                <form id="weightForm" onsubmit="handleFormSubmit(event)" class="space-y-4">
-                    <input type="hidden" id="editRecordId" value="">
-
-                    <!-- Cat Selector Buttons -->
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Selecciona Mascota</label>
-                        <div class="grid grid-cols-2 gap-2.5">
-                            <button type="button" onclick="selectFormCat('Enzo')" id="btnSelectEnzo" class="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl font-bold text-sm border-2 transition-all border-slate-900 bg-slate-100 text-slate-900 shadow-sm">
-                                <span class="w-3 h-3 rounded-full bg-white border-2 border-slate-500"></span>
-                                Enzo (Blanco)
-                            </button>
-                            <button type="button" onclick="selectFormCat('Gael')" id="btnSelectGael" class="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl font-bold text-sm border-2 transition-all border-slate-200 bg-white text-slate-600 hover:bg-slate-50">
-                                <span class="w-3 h-3 rounded-full bg-slate-950 border border-slate-600"></span>
-                                Gael (Negro)
-                            </button>
-                        </div>
-                        <input type="hidden" id="selectedCatInput" value="Enzo">
+                        <button id="cancelEditBtn" onclick="resetForm()" class="hidden text-xs font-semibold text-rose-600 hover:text-rose-700 px-2 py-1 rounded-lg hover:bg-rose-50 transition">
+                            Cancelar edición
+                        </button>
                     </div>
 
-                    <!-- Weight and Date Row -->
-                    <div class="grid grid-cols-2 gap-3">
+                    <form id="weightForm" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                        <input type="hidden" id="editRecordId" value="">
+
                         <div>
-                            <label for="weightInput" class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Peso (kg)</label>
-                            <div class="relative">
-                                <input type="number" id="weightInput" step="0.01" min="0.1" max="25" required placeholder="4.35"
-                                    class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-base font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent">
-                                <span class="absolute right-3 top-2.5 text-xs font-semibold text-slate-400">kg</span>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1.5">Selecciona mascota</label>
+                            <div class="grid grid-cols-2 gap-2.5">
+                                <button type="button" onclick="selectFormCat('Enzo')" id="btnSelectEnzo" class="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl font-bold text-sm border-2 transition-all border-slate-900 bg-slate-100 text-slate-900 shadow-sm">
+                                    <span class="w-3 h-3 rounded-full bg-white border-2 border-slate-500"></span>
+                                    Enzo (blanco)
+                                </button>
+                                <button type="button" onclick="selectFormCat('Gael')" id="btnSelectGael" class="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl font-bold text-sm border-2 transition-all border-slate-200 bg-white text-slate-600 hover:bg-slate-50">
+                                    <span class="w-3 h-3 rounded-full bg-slate-950 border border-slate-600"></span>
+                                    Gael (negro)
+                                </button>
+                            </div>
+                            <input type="hidden" id="selectedCatInput" value="Enzo">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label for="weightInput" class="block text-xs font-semibold text-slate-600 mb-1.5">Peso (kg)</label>
+                                <div class="relative">
+                                    <input type="number" id="weightInput" step="0.01" min="0.1" max="25" required placeholder="4.35"
+                                        class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-base font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900">
+                                    <span class="absolute right-3 top-2.5 text-xs font-semibold text-slate-400">kg</span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="dateInput" class="block text-xs font-semibold text-slate-600 mb-1.5">Fecha del pesaje</label>
+                                <input type="date" id="dateInput" required
+                                    class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900">
                             </div>
                         </div>
 
                         <div>
-                            <label for="dateInput" class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Fecha</label>
-                            <input type="date" id="dateInput" required
-                                class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent">
+                            <label class="block text-xs font-semibold text-slate-600 mb-1.5">Notas u observaciones</label>
+                            <input type="text" id="notesInput" maxlength="100" placeholder="Ej. Control en casa, ayunas..."
+                                class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900">
+                            
+                            <div class="flex flex-wrap gap-1.5 mt-2">
+                                <button type="button" onclick="appendNote('En casa (báscula)')" class="text-[11px] px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium transition">+ Báscula en casa</button>
+                                <button type="button" onclick="appendNote('Control veterinario')" class="text-[11px] px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium transition">+ Veterinario</button>
+                                <button type="button" onclick="appendNote('Día de baño')" class="text-[11px] px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium transition">+ Día de baño</button>
+                                <button type="button" onclick="appendNote('Cambio de alimento')" class="text-[11px] px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium transition">+ Alimento</button>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Quick Tag Chips -->
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Notas u Observaciones</label>
-                        <input type="text" id="notesInput" maxlength="100" placeholder="Ej. Control veterinario, en ayunas..."
-                            class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent">
-                        
-                        <div class="flex flex-wrap gap-1.5 mt-2">
-                            <button type="button" onclick="appendNote('En casa (báscula)')" class="text-[11px] px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium transition">+ Báscula casa</button>
-                            <button type="button" onclick="appendNote('Control veterinario')" class="text-[11px] px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium transition">+ Veterinario</button>
-                            <button type="button" onclick="appendNote('Peluquería / Baño')" class="text-[11px] px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium transition">+ Peluquería/Baño</button>
-                            <button type="button" onclick="appendNote('Cambio de alimento')" class="text-[11px] px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium transition">+ Alimento</button>
-                            <button type="button" onclick="appendNote('Desparasitación')" class="text-[11px] px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium transition">+ Desparasitación</button>
-                        </div>
-                    </div>
-
-                    <button type="submit" id="submitBtn" class="w-full py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm shadow-md hover:shadow-lg transition flex items-center justify-center gap-2">
-                        <i class="ph-bold ph-check-circle text-lg"></i>
-                        <span id="submitBtnText">Guardar Registro</span>
-                    </button>
-                </form>
-            </div>
-
-            <!-- Interactive Chart Card (8 columns on desktop) -->
-            <div class="lg:col-span-8 bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 flex flex-col">
-                <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
-                    <div>
-                        <h3 class="font-bold text-base text-slate-900 flex items-center gap-2">
-                            <i class="ph-fill ph-chart-line text-slate-700 text-lg"></i>
-                            Curva de Evolución de Peso
-                        </h3>
-                        <p class="text-xs text-slate-500">Comparativa histórica en kilogramos (kg)</p>
-                    </div>
-
-                    <!-- Time Range Selector -->
-                    <div class="inline-flex rounded-xl bg-slate-100 p-1 border border-slate-200/60">
-                        <button onclick="setChartRange(90)" id="range-90" class="px-2.5 py-1 rounded-lg text-xs font-semibold transition text-slate-600 hover:text-slate-900">3M</button>
-                        <button onclick="setChartRange(180)" id="range-180" class="px-2.5 py-1 rounded-lg text-xs font-semibold transition text-slate-600 hover:text-slate-900">6M</button>
-                        <button onclick="setChartRange(365)" id="range-365" class="px-2.5 py-1 rounded-lg text-xs font-semibold transition text-slate-600 hover:text-slate-900">1A</button>
-                        <button onclick="setChartRange(0)" id="range-0" class="px-2.5 py-1 rounded-lg text-xs font-semibold transition bg-white text-slate-900 shadow-sm">Todo</button>
-                    </div>
+                        <button type="submit" id="submitBtn" class="w-full py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm shadow-md transition flex items-center justify-center gap-2">
+                            <i class="ph-bold ph-check-circle text-lg"></i>
+                            <span id="submitBtnText">Guardar registro</span>
+                        </button>
+                    </form>
                 </div>
 
-                <!-- Chart Container with Neutral Slate Contrast Background so White & Black lines pop -->
-                <div class="relative w-full h-64 sm:h-80 bg-slate-200/75 rounded-xl p-3 border border-slate-300/80">
-                    <canvas id="weightChart"></canvas>
-                    
-                    <!-- Empty Chart State Overlay -->
-                    <div id="emptyChartOverlay" class="hidden absolute inset-0 bg-white/95 backdrop-blur-[2px] flex flex-col items-center justify-center text-center p-6 rounded-xl">
-                        <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mb-3">
-                            <i class="ph ph-chart-line-up text-2xl"></i>
+                <!-- Gráfica de evolución de peso -->
+                <div class="lg:col-span-8 bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 flex flex-col">
+                    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                        <div>
+                            <h3 class="font-bold text-base text-slate-900 flex items-center gap-2">
+                                <i class="ph-fill ph-chart-line text-slate-700 text-lg"></i>
+                                Curva de evolución de peso
+                            </h3>
+                            <p class="text-xs text-slate-500">Comparativa histórica en kilogramos (kg)</p>
                         </div>
-                        <p class="text-sm font-bold text-slate-700">Aún no hay suficientes datos para graficar</p>
-                        <p class="text-xs text-slate-500 max-w-xs mt-1">Registra el peso de Enzo o Gael en el formulario, o carga datos de demostración para explorar la gráfica.</p>
-                        <button onclick="loadSampleData()" class="mt-3 px-3.5 py-2 rounded-xl bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition inline-flex items-center gap-1.5">
-                            <i class="ph-bold ph-magic-wand"></i> Cargar datos de ejemplo
+
+                        <div class="inline-flex rounded-xl bg-slate-100 p-1 border border-slate-200/60">
+                            <button onclick="setChartRange(90)" id="range-90" class="px-2.5 py-1 rounded-lg text-xs font-semibold transition text-slate-600 hover:text-slate-900">3 meses</button>
+                            <button onclick="setChartRange(180)" id="range-180" class="px-2.5 py-1 rounded-lg text-xs font-semibold transition text-slate-600 hover:text-slate-900">6 meses</button>
+                            <button onclick="setChartRange(365)" id="range-365" class="px-2.5 py-1 rounded-lg text-xs font-semibold transition text-slate-600 hover:text-slate-900">1 año</button>
+                            <button onclick="setChartRange(0)" id="range-0" class="px-2.5 py-1 rounded-lg text-xs font-semibold transition bg-white text-slate-900 shadow-sm">Todo</button>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-64 sm:h-80 bg-slate-200/75 rounded-xl p-3 border border-slate-300/80">
+                        <canvas id="weightChart"></canvas>
+                        
+                        <div id="emptyChartOverlay" class="hidden absolute inset-0 bg-white/95 backdrop-blur-[2px] flex flex-col items-center justify-center text-center p-6 rounded-xl">
+                            <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mb-3">
+                                <i class="ph ph-chart-line-up text-2xl"></i>
+                            </div>
+                            <p class="text-sm font-bold text-slate-700">Aún no hay suficientes datos para graficar</p>
+                            <p class="text-xs text-slate-500 max-w-xs mt-1">Registra el peso de Enzo o Gael en el formulario o carga los datos de ejemplo.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tabla de historial de peso -->
+            <section class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
+                <div class="p-5 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                        <h3 class="font-bold text-base text-slate-900 flex items-center gap-2">
+                            <i class="ph-bold ph-list-numbers text-slate-700 text-lg"></i>
+                            Historial detallado de pesajes
+                        </h3>
+                        <p class="text-xs text-slate-500" id="historyCountLabel">Mostrando todos los registros</p>
+                    </div>
+
+                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                        <div class="relative flex-1 sm:w-56">
+                            <i class="ph ph-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-sm"></i>
+                            <input type="text" id="searchInput" oninput="renderAll()" placeholder="Buscar por nota o fecha..."
+                                class="w-full pl-8 pr-3 py-1.5 rounded-xl border border-slate-200 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900">
+                        </div>
+                        <button onclick="exportCSV()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition inline-flex items-center gap-1.5 shrink-0">
+                            <i class="ph-bold ph-download-simple"></i> Exportar CSV
                         </button>
                     </div>
                 </div>
-            </div>
-        </section>
 
-        <!-- Historical Log Table Section -->
-        <section class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
-            <div class="p-5 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3">
-                <div>
-                    <h3 class="font-bold text-base text-slate-900 flex items-center gap-2">
-                        <i class="ph-bold ph-list-Numbers text-slate-700 text-lg"></i>
-                        Historial Detallado de Pesajes
-                    </h3>
-                    <p class="text-xs text-slate-500" id="historyCountLabel">Mostrando todos los registros</p>
+                <div class="overflow-x-auto custom-scrollbar">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50/80 text-xs font-bold text-slate-500 border-b border-slate-200/70">
+                                <th class="py-3 px-4">Mascota</th>
+                                <th class="py-3 px-4">Fecha</th>
+                                <th class="py-3 px-4">Edad al pesar</th>
+                                <th class="py-3 px-4">Peso</th>
+                                <th class="py-3 px-4">Variación</th>
+                                <th class="py-3 px-4">Notas</th>
+                                <th class="py-3 px-4 text-right">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody" class="divide-y divide-slate-100 text-sm"></tbody>
+                    </table>
                 </div>
 
-                <div class="flex items-center gap-2 w-full sm:w-auto">
-                    <div class="relative flex-1 sm:w-56">
-                        <i class="ph ph-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-sm"></i>
-                        <input type="text" id="searchInput" oninput="renderAll()" placeholder="Buscar por nota o fecha..."
-                            class="w-full pl-8 pr-3 py-1.5 rounded-xl border border-slate-200 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900">
+                <!-- Estado vacío de la tabla de peso -->
+                <div id="emptyTableState" class="hidden py-10 px-4 text-center">
+                    <p class="text-sm font-semibold text-slate-600">No se encontraron registros de peso</p>
+                    <p class="text-xs text-slate-400 mt-1">Usa el formulario superior para añadir la primera medición de Enzo o Gael.</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- ================================================================== -->
+        <!-- MÓDULO 2: EXÁMENES DE SANGRE Y PERFIL HORMONAL                     -->
+        <!-- ================================================================== -->
+        <div id="module-hormonas" class="space-y-6">
+            <section class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
+                <div class="p-5 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3 bg-gradient-to-r from-slate-900 to-slate-800 text-white">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-amber-300 border border-white/15">
+                            <i class="ph-fill ph-flask text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-base text-white">Exámenes de sangre y perfil hormonal</h3>
+                            <p class="text-xs text-slate-300">Registro clínico de hormonas tiroideas, cortisol, glucosa, función renal y hepática</p>
+                        </div>
                     </div>
-                    <button onclick="exportCSV()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition inline-flex items-center gap-1.5 shrink-0">
-                        <i class="ph-bold ph-download-simple"></i> CSV
-                    </button>
+                    <span class="text-[11px] bg-white/10 border border-white/15 px-3 py-1 rounded-full text-slate-200 font-medium">
+                        Evaluación automática frente a límites de referencia
+                    </span>
                 </div>
-            </div>
 
-            <!-- Responsive Table -->
-            <div class="overflow-x-auto custom-scrollbar">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-slate-50/80 text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200/70">
-                            <th class="py-3 px-4">Mascota</th>
-                            <th class="py-3 px-4">Fecha</th>
-                            <th class="py-3 px-4">Edad al Pesar</th>
-                            <th class="py-3 px-4">Peso</th>
-                            <th class="py-3 px-4">Variación</th>
-                            <th class="py-3 px-4">Notas</th>
-                            <th class="py-3 px-4 text-right">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="historyTableBody" class="divide-y divide-slate-100 text-sm">
-                        <!-- Dynamically populated -->
-                    </tbody>
-                </table>
-            </div>
+                <div class="p-5 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                    <!-- Formulario para agregar resultado de sangre / hormonas -->
+                    <form id="bloodForm" onsubmit="handleBloodSubmit(event)" class="lg:col-span-4 bg-slate-50 p-4 rounded-2xl border border-slate-200/90 space-y-3.5">
+                        <div class="flex items-center justify-between">
+                            <h4 id="bloodFormTitle" class="font-bold text-sm text-slate-900">Añadir resultado de laboratorio</h4>
+                            <button type="button" id="cancelBloodEditBtn" onclick="resetBloodForm()" class="hidden text-xs font-semibold text-rose-600 hover:underline">Cancelar</button>
+                        </div>
+                        <input type="hidden" id="editBloodId" value="">
 
-            <!-- Empty State for Table -->
-    <!-- Modal: Profiles, Birthdates & Ideal Weight Settings -->
+                        <div class="grid grid-cols-2 gap-2.5">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Mascota</label>
+                                <select id="bloodCatInput" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs font-bold text-slate-900 bg-white">
+                                    <option value="Enzo">Enzo (blanco)</option>
+                                    <option value="Gael">Gael (negro)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Fecha del examen</label>
+                                <input type="date" id="bloodDateInput" required class="w-full rounded-xl border border-slate-300 px-2.5 py-2 text-xs font-semibold text-slate-900 bg-white">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Hormona o parámetro evaluado</label>
+                            <select id="bloodParamSelect" onchange="handleBloodParamChange()" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs font-bold text-slate-900 bg-white">
+                                <!-- Se llena dinámicamente desde LIMITES_REFERENCIA_SANGRE -->
+                            </select>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2.5 items-end">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Resultado obtenido</label>
+                                <div class="relative">
+                                    <input type="number" id="bloodValueInput" step="0.01" required placeholder="Ej. 2.15"
+                                        class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm font-extrabold text-slate-900 bg-white">
+                                    <span id="bloodUnitLabel" class="absolute right-2.5 top-2 text-[11px] font-bold text-slate-400">µg/dL</span>
+                                </div>
+                            </div>
+                            <div class="bg-white p-2 rounded-xl border border-slate-200 text-center">
+                                <span class="text-[10px] font-semibold text-slate-400 block">Rango de referencia</span>
+                                <span id="bloodRefPreview" class="text-xs font-bold text-slate-700">0.8 - 4.7 µg/dL</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Veterinaria / observación clínica</label>
+                            <input type="text" id="bloodNotesInput" placeholder="Ej. Control tiroideo semestral en ayunas"
+                                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs text-slate-800 bg-white">
+                        </div>
+
+                        <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-sm transition flex items-center justify-center gap-1.5">
+                            <i class="ph-bold ph-plus-circle text-base"></i>
+                            <span id="bloodSubmitText">Guardar resultado clínico</span>
+                        </button>
+                    </form>
+
+                    <!-- Tabla de resultados de hormonas y sangre -->
+                    <div class="lg:col-span-8 space-y-4">
+                        <div class="overflow-x-auto custom-scrollbar border border-slate-200/80 rounded-2xl">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50 text-xs font-bold text-slate-500 border-b border-slate-200">
+                                        <th class="py-3 px-3.5">Mascota</th>
+                                        <th class="py-3 px-3.5">Fecha</th>
+                                        <th class="py-3 px-3.5">Hormona / parámetro</th>
+                                        <th class="py-3 px-3.5">Resultado</th>
+                                        <th class="py-3 px-3.5">Límites de referencia</th>
+                                        <th class="py-3 px-3.5">Estado</th>
+                                        <th class="py-3 px-3.5">Notas</th>
+                                        <th class="py-3 px-3.5 text-right">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bloodTableBody" class="divide-y divide-slate-100 text-xs sm:text-sm"></tbody>
+                            </table>
+                            <div id="emptyBloodState" class="hidden py-8 px-4 text-center text-xs text-slate-400">
+                                No hay exámenes de sangre registrados para el filtro seleccionado.
+                            </div>
+                        </div>
+
+                        <!-- Resumen de la guía de límites de referencia activos -->
+                        <details class="bg-slate-50 rounded-xl border border-slate-200/80 p-3.5 text-xs">
+                            <summary class="font-bold text-slate-700 cursor-pointer flex items-center justify-between">
+                                <span class="flex items-center gap-1.5">
+                                    <i class="ph-bold ph-info text-slate-500"></i>
+                                    Ver tabla de valores límite de referencia configurados en el código
+                                </span>
+                                <span class="text-[11px] font-normal text-slate-500">Haz clic para desplegar</span>
+                            </summary>
+                            <div id="referenceLimitsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mt-3 pt-3 border-t border-slate-200/70"></div>
+                        </details>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ================================================================== -->
+        <!-- MÓDULO 3: CATÁLOGO VIRTUAL DE BAÑO, UÑAS, HIGIENE Y MEDICAMENTOS   -->
+        <!-- ================================================================== -->
+        <div id="module-cuidados" class="space-y-6">
+            <section class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
+                <div class="p-5 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center">
+                            <i class="ph-fill ph-sparkle text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-base text-slate-900">Catálogo virtual de cuidados, higiene y medicamentos</h3>
+                            <p class="text-xs text-slate-500">Control de fechas de baño, corte de uñas, limpieza de lagrimales, antiparasitarios y medicamentos con cálculo de próxima fecha</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-5 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                    <!-- Formulario de rutina / medicamento -->
+                    <form id="careForm" onsubmit="handleCareSubmit(event)" class="lg:col-span-4 bg-slate-50 p-4 rounded-2xl border border-slate-200/90 space-y-3.5">
+                        <div class="flex items-center justify-between">
+                            <h4 id="careFormTitle" class="font-bold text-sm text-slate-900">Programar cuidado o medicamento</h4>
+                            <button type="button" id="cancelCareEditBtn" onclick="resetCareForm()" class="hidden text-xs font-semibold text-rose-600 hover:underline">Cancelar</button>
+                        </div>
+                        <input type="hidden" id="editCareId" value="">
+
+                        <div class="grid grid-cols-2 gap-2.5">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Mascota</label>
+                                <select id="careCatInput" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs font-bold text-slate-900 bg-white">
+                                    <option value="Enzo">Enzo (blanco)</option>
+                                    <option value="Gael">Gael (negro)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Categoría</label>
+                                <select id="careTypeInput" onchange="handleCareTypePreset()" class="w-full rounded-xl border border-slate-300 px-2.5 py-2 text-xs font-bold text-slate-900 bg-white">
+                                    <option value="Baño y secado">🛁 Baño y secado</option>
+                                    <option value="Corte de uñas">✂️ Corte de uñas</option>
+                                    <option value="Medicamento">💊 Medicamento / dosis</option>
+                                    <option value="Desparasitación">🛡️ Desparasitación</option>
+                                    <option value="Limpieza ocular y cepillado">👁️ Limpieza ocular / cepillado</option>
+                                    <option value="Vacunación">💉 Vacunación</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre del cuidado, producto o medicamento</label>
+                            <input type="text" id="careTitleInput" required placeholder="Ej. Baño con champú blanqueador / Corte de puntas"
+                                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-900 bg-white">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2.5">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Última fecha realizada</label>
+                                <input type="date" id="careLastDateInput" required
+                                    class="w-full rounded-xl border border-slate-300 px-2.5 py-2 text-xs font-semibold text-slate-900 bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Frecuencia (cada cuántos días)</label>
+                                <div class="relative">
+                                    <input type="number" id="careFreqDaysInput" min="1" max="730" required value="30"
+                                        class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs font-bold text-slate-900 bg-white">
+                                    <span class="absolute right-2.5 top-2 text-[11px] font-semibold text-slate-400">días</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Dosis o instrucciones adicionales</label>
+                            <input type="text" id="careDoseInput" placeholder="Ej. 1 comprimido, champú hipoalergénico, revisar nudos..."
+                                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs text-slate-800 bg-white">
+                        </div>
+
+                        <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-sm transition flex items-center justify-center gap-1.5">
+                            <i class="ph-bold ph-calendar-plus text-base"></i>
+                            <span id="careSubmitText">Guardar en el catálogo</span>
+                        </button>
+                    </form>
+
+                    <!-- Tarjetas y listado del catálogo de cuidados -->
+                    <div class="lg:col-span-8 space-y-3">
+                        <div id="careCardsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-3.5"></div>
+                        <div id="emptyCareState" class="hidden py-10 px-4 text-center text-xs text-slate-400 border border-dashed border-slate-200 rounded-2xl">
+                            Aún no hay cuidados o medicamentos registrados para esta vista.
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <!-- Modal: Configuración de nacimiento, perfiles y metas -->
     <div id="profileModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-200 animate-slide-up">
             <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                 <h3 class="font-bold text-base text-slate-900 flex items-center gap-2">
                     <i class="ph-fill ph-cat text-lg text-slate-700"></i>
-                    Nacimiento, Perfiles y Metas
+                    Nacimiento, perfiles y metas
                 </h3>
                 <button onclick="closeProfileModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
                     <i class="ph-bold ph-x text-lg"></i>
@@ -480,56 +709,52 @@
             </div>
 
             <form onsubmit="saveProfiles(event)" class="mt-4 space-y-5">
-                <!-- Enzo Settings (Persa Blanco) -->
+                <!-- Ajustes de Enzo -->
                 <div class="p-4 rounded-xl bg-slate-50 border-2 border-slate-200 space-y-3">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-2 font-bold text-sm text-slate-900">
-                            <span class="w-3 h-3 rounded-full bg-white border-2 border-slate-500"></span>
-                            Enzo • Persa blanco
-                        </div>
+                    <div class="flex items-center gap-2 font-bold text-sm text-slate-900">
+                        <span class="w-3 h-3 rounded-full bg-white border-2 border-slate-500"></span>
+                        Enzo • Persa blanco
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-600 uppercase mb-1">Fecha de Nacimiento</label>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Fecha de nacimiento</label>
                             <input type="date" id="birthEnzoInput" required
                                 class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs font-bold text-slate-900 bg-white">
                         </div>
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-600 uppercase mb-1">Peso Ideal (kg)</label>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Peso ideal (kg)</label>
                             <input type="number" id="idealEnzoInput" step="0.05" min="1" max="15" required
                                 class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-bold text-slate-900 bg-white">
                         </div>
                     </div>
                     <div>
-                        <label class="block text-[11px] font-semibold text-slate-600 uppercase mb-1">Notas del Perfil</label>
-                        <input type="text" id="bioEnzoInput" placeholder="Ej. Persa Blanco, pelaje largo"
+                        <label class="block text-[11px] font-semibold text-slate-600 mb-1">Notas del perfil</label>
+                        <input type="text" id="bioEnzoInput" placeholder="Ej. Persa blanco, pelaje largo"
                             class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-xs text-slate-800 bg-white">
                     </div>
                 </div>
 
-                <!-- Gael Settings (Persa Negro) -->
+                <!-- Ajustes de Gael -->
                 <div class="p-4 rounded-xl bg-slate-900 text-white border-2 border-slate-800 space-y-3">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-2 font-bold text-sm text-white">
-                            <span class="w-3 h-3 rounded-full bg-slate-950 border border-slate-400"></span>
-                            Gael • Persa negro
-                        </div>
+                    <div class="flex items-center gap-2 font-bold text-sm text-white">
+                        <span class="w-3 h-3 rounded-full bg-slate-950 border border-slate-400"></span>
+                        Gael • Persa negro
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-300 uppercase mb-1">Fecha de Nacimiento</label>
+                            <label class="block text-[11px] font-semibold text-slate-300 mb-1">Fecha de nacimiento</label>
                             <input type="date" id="birthGaelInput" required
                                 class="w-full rounded-lg border border-slate-700 px-2.5 py-1.5 text-xs font-bold text-white bg-slate-800 [color-scheme:dark]">
                         </div>
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-300 uppercase mb-1">Peso ideal (kg)</label>
+                            <label class="block text-[11px] font-semibold text-slate-300 mb-1">Peso ideal (kg)</label>
                             <input type="number" id="idealGaelInput" step="0.05" min="1" max="15" required
                                 class="w-full rounded-lg border border-slate-700 px-3 py-1.5 text-xs font-bold text-white bg-slate-800">
                         </div>
                     </div>
                     <div>
-                        <label class="block text-[11px] font-semibold text-slate-300 uppercase mb-1">Notas del perfil</label>
-                        <input type="text" id="bioGaelInput" placeholder="Ej. Persa Negro, castrado"
+                        <label class="block text-[11px] font-semibold text-slate-300 mb-1">Notas del perfil</label>
+                        <input type="text" id="bioGaelInput" placeholder="Ej. Persa negro, ojos dorados"
                             class="w-full rounded-lg border border-slate-700 px-3 py-1.5 text-xs text-white bg-slate-800">
                     </div>
                 </div>
@@ -542,7 +767,7 @@
         </div>
     </div>
 
-    <!-- Modal: Data Backup, Export & Demo Data -->
+    <!-- Modal: Gestión de datos y copias de seguridad -->
     <div id="dataModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-200 animate-slide-up space-y-4">
             <div class="flex items-center justify-between pb-3 border-b border-slate-100">
@@ -557,8 +782,8 @@
 
             <div class="space-y-3 text-xs text-slate-600">
                 <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
-                    <p class="font-bold text-slate-800">Exportar / Respaldar historial</p>
-                    <p>Descarga tus registros en formato CSV (para abrir en Excel o Google Sheets) o en archivo JSON completo para restaurarlo después.</p>
+                    <p class="font-bold text-slate-800">Exportar o respaldar catálogo completo</p>
+                    <p>Descarga los pesajes en formato CSV (Excel) o descarga un respaldo completo en JSON (incluye edades, pesajes, hormonas y cuidados).</p>
                     <div class="flex gap-2 pt-1">
                         <button onclick="exportCSV()" class="flex-1 py-2 px-3 rounded-lg bg-slate-900 text-white font-semibold hover:bg-slate-800 transition flex items-center justify-center gap-1.5">
                             <i class="ph-bold ph-file-csv text-sm"></i> Descargar CSV
@@ -575,8 +800,8 @@
                 </div>
 
                 <div class="p-3.5 rounded-xl bg-amber-50/70 border border-amber-200/80 space-y-2">
-                    <p class="font-bold text-amber-950">Datos de prueba / Reinicio</p>
-                    <p class="text-amber-800">Puedes cargar mediciones de ejemplo para ver cómo lucen las gráficas de Enzo y Gael, o borrar todo para empezar desde cero.</p>
+                    <p class="font-bold text-amber-950">Datos de ejemplo o reinicio</p>
+                    <p class="text-amber-800">Restaura los datos demostrativos o vacía los registros para empezar desde cero.</p>
                     <div class="flex gap-2 pt-1">
                         <button onclick="loadSampleData(); closeDataModal();" class="flex-1 py-2 px-3 rounded-lg bg-amber-600 text-white font-semibold hover:bg-amber-700 transition">
                             Cargar ejemplo
@@ -590,7 +815,7 @@
         </div>
     </div>
 
-    <!-- Custom Confirmation Dialog Modal (No window.confirm used) -->
+    <!-- Modal de confirmación personalizado -->
     <div id="confirmModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-sm w-full p-5 shadow-xl border border-slate-200 animate-slide-up">
             <h4 id="confirmTitle" class="font-bold text-base text-slate-900">¿Confirmar acción?</h4>
@@ -602,15 +827,98 @@
         </div>
     </div>
 
-    <!-- Toast Notification Banner -->
+    <!-- Contenedor de notificaciones flotantes -->
     <div id="toastContainer" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
-    <!-- Application Logic & Firebase Cloud Sync -->
-    <script type="module">import { initializeApp } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, deleteDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
+    <!-- Lógica de la aplicación y sincronización con Firebase -->
+    <script type="module">
+        import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, deleteDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        const firebaseConfig = {
+        // ============================================================================
+        // SECCIÓN EDITABLE: LÍMITES DE REFERENCIA DE HORMONAS Y EXÁMENES DE SANGRE
+        // ============================================================================
+        // Aquí puedes modificar los valores "min" (mínimo), "max" (máximo) y "unidad"
+        // según los rangos de referencia impresos en el laboratorio veterinario de Enzo y Gael.
+        const LIMITES_REFERENCIA_SANGRE = {
+            "T4 total": {
+                nombre: "T4 total (tiroxina total)",
+                min: 0.80,
+                max: 4.70,
+                unidad: "µg/dL",
+                categoria: "Tiroides"
+            },
+            "T4 libre": {
+                nombre: "T4 libre (tiroxina libre)",
+                min: 0.70,
+                max: 2.60,
+                unidad: "ng/dL",
+                categoria: "Tiroides"
+            },
+            "TSH felina": {
+                nombre: "TSH (hormona estimulante de la tiroides)",
+                min: 0.03,
+                max: 0.30,
+                unidad: "ng/mL",
+                categoria: "Tiroides"
+            },
+            "Cortisol basal": {
+                nombre: "Cortisol basal",
+                min: 0.50,
+                max: 5.00,
+                unidad: "µg/dL",
+                categoria: "Adrenal / estrés"
+            },
+            "Fructosamina": {
+                nombre: "Fructosamina sérica",
+                min: 190,
+                max: 365,
+                unidad: "µmol/L",
+                categoria: "Metabólico"
+            },
+            "Glucosa": {
+                nombre: "Glucosa en ayunas",
+                min: 70,
+                max: 150,
+                unidad: "mg/dL",
+                categoria: "Metabólico"
+            },
+            "Creatinina": {
+                nombre: "Creatinina sérica (función renal)",
+                min: 0.80,
+                max: 2.40,
+                unidad: "mg/dL",
+                categoria: "Renal"
+            },
+            "SDMA": {
+                nombre: "SDMA (biomarcador renal temprano)",
+                min: 0,
+                max: 14,
+                unidad: "µg/dL",
+                categoria: "Renal"
+            },
+            "BUN": {
+                nombre: "BUN (nitrógeno ureico en sangre)",
+                min: 16,
+                max: 36,
+                unidad: "mg/dL",
+                categoria: "Renal"
+            },
+            "ALT / GPT": {
+                nombre: "ALT / GPT (enzima hepática)",
+                min: 12,
+                max: 130,
+                unidad: "U/L",
+                categoria: "Hígado"
+            }
+        };
+        // ============================================================================
+        // FIN DE LA SECCIÓN DE LÍMITES DE REFERENCIA DE HORMONAS Y SANGRE
+        // ============================================================================
+
+        // Configuración del proyecto Firebase "peso-gatos" del usuario
+        const USER_FIREBASE_CONFIG = {
             apiKey: "AIzaSyDrxMxPNeswKXaUKdfqrDz8bxKRXErlDZE",
             authDomain: "peso-gatos.firebaseapp.com",
             projectId: "peso-gatos",
@@ -618,32 +926,22 @@
             messagingSenderId: "491354086316",
             appId: "1:491354086316:web:14f4b8af8f545f085e3809"
         };
-        const app = initializeApp(firebaseConfig);
 
-        // --- Global State ---
-        let records = [];
-        let profiles = {
-            Enzo: { idealWeight: 4.50, birthDate: "2023-05-10", bio: "Gato Persa Blanco" },
-            Gael: { idealWeight: 4.80, birthDate: "2023-08-22", bio: "Gato Persa Negro" }
-        };
-        let activeViewFilter = 'all'; // 'all' | 'Enzo' | 'Gael'
-        let chartRangeDays = 0; // 0 = All, 90, 180, 365
-        let weightChartInstance = null;
-
-        // Cloud State
-        let db = null;
-        let auth = null;
-        let currentUser = null;
-        let isCloudActive = false;
+        const LOCAL_STORAGE_KEY = 'enzo_gael_catalogo_v2';
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'enzo-gael-weight-tracker';
 
-        // Default initial sample records if completely empty on first visit
+        // Datos iniciales por defecto
+        const DEFAULT_PROFILES = {
+            Enzo: { idealWeight: 4.50, birthDate: "2023-05-10", bio: "Persa blanco" },
+            Gael: { idealWeight: 4.80, birthDate: "2023-08-22", bio: "Persa negro" }
+        };
+
         const INITIAL_DEMO_RECORDS = [
             { id: 'demo-1', cat: 'Enzo', date: '2025-11-15', weight: 4.20, notes: 'Control veterinario anual' },
             { id: 'demo-2', cat: 'Gael', date: '2025-11-15', weight: 4.55, notes: 'Control veterinario anual' },
             { id: 'demo-3', cat: 'Enzo', date: '2025-12-15', weight: 4.32, notes: 'En casa (báscula)' },
             { id: 'demo-4', cat: 'Gael', date: '2025-12-15', weight: 4.65, notes: 'En casa (báscula)' },
-            { id: 'demo-5', cat: 'Enzo', date: '2026-01-20', weight: 4.40, notes: 'Peluquería / Baño' },
+            { id: 'demo-5', cat: 'Enzo', date: '2026-01-20', weight: 4.40, notes: 'Día de baño y peluquería' },
             { id: 'demo-6', cat: 'Gael', date: '2026-01-20', weight: 4.78, notes: 'Cambio de alimento húmedo' },
             { id: 'demo-7', cat: 'Enzo', date: '2026-02-18', weight: 4.45, notes: 'Peso estable' },
             { id: 'demo-8', cat: 'Gael', date: '2026-02-18', weight: 4.72, notes: 'Más activo jugando' },
@@ -651,7 +949,83 @@
             { id: 'demo-10', cat: 'Gael', date: '2026-03-15', weight: 4.76, notes: 'Control mensual en casa' }
         ];
 
-        // --- Exact Age Calculation Helper (Years, Months, Days, Total Days & Next Birthday) ---
+        const INITIAL_BLOOD_TESTS = [
+            { id: 'blood-1', cat: 'Enzo', date: '2026-02-10', param: 'T4 total', value: 2.10, notes: 'Chequeo preventivo anual' },
+            { id: 'blood-2', cat: 'Gael', date: '2026-02-10', param: 'T4 total', value: 2.35, notes: 'Chequeo preventivo anual' },
+            { id: 'blood-3', cat: 'Enzo', date: '2026-02-10', param: 'TSH felina', value: 0.11, notes: 'Perfil tiroideo normal' },
+            { id: 'blood-4', cat: 'Gael', date: '2026-02-10', param: 'Creatinina', value: 1.45, notes: 'Control renal razas persas' },
+            { id: 'blood-5', cat: 'Enzo', date: '2026-02-10', param: 'SDMA', value: 9.0, notes: 'Función renal óptima' }
+        ];
+
+        const INITIAL_CARE_ITEMS = [
+            { id: 'care-1', cat: 'Enzo', type: 'Baño y secado', title: 'Baño con champú blanqueador y secado tibio', lastDate: '2026-10-20', freqDays: 30, dose: 'Secar bien la base del pelaje' },
+            { id: 'care-2', cat: 'Gael', type: 'Baño y secado', title: 'Baño hidratante para manto negro', lastDate: '2026-10-20', freqDays: 30, dose: 'Acondicionador desenredante' },
+            { id: 'care-3', cat: 'Enzo', type: 'Corte de uñas', title: 'Corte de puntas delanteras y traseras', lastDate: '2026-11-01', freqDays: 15, dose: 'Revisar almohadillas' },
+            { id: 'care-4', cat: 'Gael', type: 'Corte de uñas', title: 'Corte de puntas delanteras y traseras', lastDate: '2026-11-01', freqDays: 15, dose: 'Revisar almohadillas' },
+            { id: 'care-5', cat: 'Enzo', type: 'Desparasitación', title: 'Pipeta antiparasitaria interna y externa', lastDate: '2026-09-15', freqDays: 90, dose: '1 pipeta según peso (4.5 kg)' },
+            { id: 'care-6', cat: 'Gael', type: 'Desparasitación', title: 'Pipeta antiparasitaria interna y externa', lastDate: '2026-09-15', freqDays: 90, dose: '1 pipeta según peso (4.8 kg)' },
+            { id: 'care-7', cat: 'Enzo', type: 'Medicamento', title: 'Malta felina para control de bolas de pelo', lastDate: '2026-11-08', freqDays: 3, dose: '2 cm de pasta oral' }
+        ];
+
+        // Estado reactivo en memoria
+        let profiles = structuredClone(DEFAULT_PROFILES);
+        let records = [];
+        let bloodTests = [];
+        let careItems = [];
+
+        let activeViewFilter = 'all'; // 'all' | 'Enzo' | 'Gael'
+        let activeSectionTab = 'todos'; // 'todos' | 'peso' | 'hormonas' | 'cuidados'
+        let chartRangeDays = 0;
+        let weightChartInstance = null;
+
+        // Estado de Firebase
+        let db = null;
+        let auth = null;
+        let currentUser = null;
+        let isCloudActive = false;
+
+        // --- Respaldo local instantáneo (garantiza que nunca se borren las fechas al refrescar) ---
+        function loadFromLocalCache() {
+            try {
+                const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
+                if (!raw) {
+                    records = structuredClone(INITIAL_DEMO_RECORDS);
+                    bloodTests = structuredClone(INITIAL_BLOOD_TESTS);
+                    careItems = structuredClone(INITIAL_CARE_ITEMS);
+                    saveToLocalCache();
+                    return;
+                }
+                const parsed = JSON.parse(raw);
+                if (parsed.profiles) {
+                    profiles.Enzo = { ...DEFAULT_PROFILES.Enzo, ...parsed.profiles.Enzo };
+                    profiles.Gael = { ...DEFAULT_PROFILES.Gael, ...parsed.profiles.Gael };
+                }
+                records = Array.isArray(parsed.records) ? parsed.records : structuredClone(INITIAL_DEMO_RECORDS);
+                bloodTests = Array.isArray(parsed.bloodTests) ? parsed.bloodTests : structuredClone(INITIAL_BLOOD_TESTS);
+                careItems = Array.isArray(parsed.careItems) ? parsed.careItems : structuredClone(INITIAL_CARE_ITEMS);
+            } catch (e) {
+                console.warn("Error leyendo caché local:", e);
+                records = structuredClone(INITIAL_DEMO_RECORDS);
+                bloodTests = structuredClone(INITIAL_BLOOD_TESTS);
+                careItems = structuredClone(INITIAL_CARE_ITEMS);
+            }
+        }
+
+        function saveToLocalCache() {
+            try {
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({
+                    profiles,
+                    records,
+                    bloodTests,
+                    careItems,
+                    updatedAt: Date.now()
+                }));
+            } catch (e) {
+                console.warn("No se pudo guardar en caché local:", e);
+            }
+        }
+
+        // --- Cálculo exacto de edad ---
         function calculateExactAge(birthDateStr, targetDateStr = null) {
             if (!birthDateStr) return null;
             const partsB = birthDateStr.split('-').map(Number);
@@ -688,7 +1062,6 @@
             const diffMs = ref.getTime() - birth.getTime();
             const totalDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
 
-            // Next birthday calculation
             let nextBday = new Date(ref.getFullYear(), birth.getMonth(), birth.getDate());
             if (nextBday < ref) {
                 nextBday = new Date(ref.getFullYear() + 1, birth.getMonth(), birth.getDate());
@@ -720,13 +1093,13 @@
             };
         }
 
-        // --- Setup Today's Date in Input ---
-        function setDefaultDate() {
+        function setDefaultDates() {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('dateInput').value = today;
+            document.getElementById('bloodDateInput').value = today;
+            document.getElementById('careLastDateInput').value = today;
         }
 
-        // --- UI Toast Helper ---
         function showToast(message, type = 'success') {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
@@ -751,58 +1124,52 @@
             text.textContent = statusText;
         }
 
-        // --- Initialize Firebase with Rule 3 Compliance ---
+        // --- Inicialización de almacenamiento y Firebase sin duplicados ---
         async function initStorage() {
-            setDefaultDate();
+            setDefaultDates();
+            populateBloodParametersSelect();
+            loadFromLocalCache();
+            renderAll();
 
-                    try {
-                    // Se inicializa Firebase con la configuración declarada arriba
-                    const app = initializeApp(firebaseConfig);
-                    auth = getAuth(app);
-                    db = getFirestore(app);
-        
-                    // Autenticación anónima para habilitar acceso a Firestore
+            try {
+                const configToUse = (typeof __firebase_config !== 'undefined' && __firebase_config)
+                    ? JSON.parse(__firebase_config)
+                    : USER_FIREBASE_CONFIG;
+
+                const app = getApps().length > 0 ? getApp() : initializeApp(configToUse);
+                auth = getAuth(app);
+                db = getFirestore(app);
+
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
                     await signInAnonymously(auth);
-        
-                    onAuthStateChanged(auth, (user) => {
-                        currentUser = user;
-                        if (user) {
-                            isCloudActive = true;
-                            updateSyncIndicator('Nube Sincronizada', 'bg-emerald-400');
-                            setupFirestoreListeners(user.uid);
-                        }
-                    });
-                    return;
-                } catch (err) {
-                    console.warn("Usando modo sin conexión / memoria local:", err);
                 }
 
-            // Fallback if Firebase env is not present
-            updateSyncIndicator('Modo Local Activo', 'bg-emerald-400');
-            records = [...INITIAL_DEMO_RECORDS];
-            renderAll();
+                onAuthStateChanged(auth, (user) => {
+                    currentUser = user;
+                    if (user) {
+                        isCloudActive = true;
+                        updateSyncIndicator('Nube sincronizada', 'bg-emerald-400');
+                        setupFirestoreListeners(user.uid);
+                    }
+                });
+            } catch (err) {
+                console.warn("Operando con guardado local inmediato (verifica Authentication > Anónimo en Firebase):", err);
+                updateSyncIndicator('Guardado local activo', 'bg-emerald-400');
+            }
         }
 
         function setupFirestoreListeners(uid) {
             if (!currentUser || !db) return;
 
-            // Listen to weight records collection (Rule 1 & Rule 2 compliant)
-            const recordsCol = collection(db, 'artifacts', appId, 'users', uid, 'weight_records');
-            onSnapshot(recordsCol, (snapshot) => {
-                const loaded = [];
-                snapshot.forEach((docSnap) => {
-                    loaded.push(docSnap.data());
-                });
-                records = loaded;
-                renderAll();
-            }, (error) => {
-                console.error("Error leyendo registros:", error);
-                updateSyncIndicator('Error de sincronización', 'bg-rose-400');
-            });
-
-            // Listen to profiles metadata
+            // 1. Perfiles y fechas de nacimiento
             const profilesCol = collection(db, 'artifacts', appId, 'users', uid, 'pet_profiles');
             onSnapshot(profilesCol, (snapshot) => {
+                if (snapshot.empty) {
+                    persistProfilesToCloud();
+                    return;
+                }
                 snapshot.forEach((docSnap) => {
                     const data = docSnap.data();
                     if (data.cat && profiles[data.cat]) {
@@ -813,55 +1180,170 @@
                         };
                     }
                 });
+                saveToLocalCache();
                 renderAll();
-            }, (error) => {
-                console.error("Error leyendo perfiles:", error);
+            }, (err) => {
+                console.warn("Aviso en lectura de perfiles en la nube:", err.message);
             });
+
+            // 2. Pesajes
+            const recordsCol = collection(db, 'artifacts', appId, 'users', uid, 'weight_records');
+            onSnapshot(recordsCol, (snapshot) => {
+                if (!snapshot.empty) {
+                    const loaded = [];
+                    snapshot.forEach((docSnap) => loaded.push(docSnap.data()));
+                    records = loaded;
+                    saveToLocalCache();
+                    renderAll();
+                } else if (records.length > 0) {
+                    records.forEach(r => {
+                        setDoc(doc(db, 'artifacts', appId, 'users', uid, 'weight_records', r.id), r).catch(() => {});
+                    });
+                }
+            }, (err) => {
+                console.warn("Aviso en lectura de pesajes:", err.message);
+            });
+
+            // 3. Exámenes de sangre y hormonas
+            const bloodCol = collection(db, 'artifacts', appId, 'users', uid, 'blood_records');
+            onSnapshot(bloodCol, (snapshot) => {
+                if (!snapshot.empty) {
+                    const loaded = [];
+                    snapshot.forEach((docSnap) => loaded.push(docSnap.data()));
+                    bloodTests = loaded;
+                    saveToLocalCache();
+                    renderAll();
+                } else if (bloodTests.length > 0) {
+                    bloodTests.forEach(b => {
+                        setDoc(doc(db, 'artifacts', appId, 'users', uid, 'blood_records', b.id), b).catch(() => {});
+                    });
+                }
+            }, () => {});
+
+            // 4. Catálogo de cuidados y medicamentos
+            const careCol = collection(db, 'artifacts', appId, 'users', uid, 'care_records');
+            onSnapshot(careCol, (snapshot) => {
+                if (!snapshot.empty) {
+                    const loaded = [];
+                    snapshot.forEach((docSnap) => loaded.push(docSnap.data()));
+                    careItems = loaded;
+                    saveToLocalCache();
+                    renderAll();
+                } else if (careItems.length > 0) {
+                    careItems.forEach(c => {
+                        setDoc(doc(db, 'artifacts', appId, 'users', uid, 'care_records', c.id), c).catch(() => {});
+                    });
+                }
+            }, () => {});
         }
 
-        // --- Persistence Operations ---
-        async function saveRecordToStorage(record) {
-            const existingIndex = records.findIndex(r => r.id === record.id);
-            if (existingIndex >= 0) {
-                records[existingIndex] = record;
-            } else {
-                records.push(record);
+        // --- Operaciones de guardado (Local + Nube) ---
+        async function persistProfilesToCloud() {
+            saveToLocalCache();
+            if (isCloudActive && currentUser && db) {
+                try {
+                    await setDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'pet_profiles', 'Enzo'), {
+                        cat: 'Enzo', ...profiles.Enzo
+                    });
+                    await setDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'pet_profiles', 'Gael'), {
+                        cat: 'Gael', ...profiles.Gael
+                    });
+                } catch (err) {
+                    console.warn("Guardado en memoria local (pendiente nube):", err);
+                }
             }
+        }
+
+        async function saveRecordToStorage(record) {
+            const idx = records.findIndex(r => r.id === record.id);
+            if (idx >= 0) records[idx] = record;
+            else records.push(record);
+
+            saveToLocalCache();
             renderAll();
 
             if (isCloudActive && currentUser && db) {
                 try {
-                    const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'weight_records', record.id);
-                    await setDoc(docRef, record);
+                    await setDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'weight_records', record.id), record);
                 } catch (e) {
-                    console.error("Error guardando en nube:", e);
-                    showToast("Error al sincronizar en la nube", "error");
+                    console.warn("Error sincronizando peso en la nube:", e);
                 }
             }
         }
 
         async function deleteRecordFromStorage(id) {
             records = records.filter(r => r.id !== id);
+            saveToLocalCache();
             renderAll();
 
             if (isCloudActive && currentUser && db) {
                 try {
-                    const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'weight_records', id);
-                    await deleteDoc(docRef);
-                } catch (e) {
-                    console.error("Error eliminando en nube:", e);
-                }
+                    await deleteDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'weight_records', id));
+                } catch (e) {}
             }
         }
 
-        // --- Calculations & Sorting ---
+        async function saveBloodToStorage(item) {
+            const idx = bloodTests.findIndex(b => b.id === item.id);
+            if (idx >= 0) bloodTests[idx] = item;
+            else bloodTests.push(item);
+
+            saveToLocalCache();
+            renderAll();
+
+            if (isCloudActive && currentUser && db) {
+                try {
+                    await setDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'blood_records', item.id), item);
+                } catch (e) {}
+            }
+        }
+
+        async function deleteBloodFromStorage(id) {
+            bloodTests = bloodTests.filter(b => b.id !== id);
+            saveToLocalCache();
+            renderAll();
+
+            if (isCloudActive && currentUser && db) {
+                try {
+                    await deleteDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'blood_records', id));
+                } catch (e) {}
+            }
+        }
+
+        async function saveCareToStorage(item) {
+            const idx = careItems.findIndex(c => c.id === item.id);
+            if (idx >= 0) careItems[idx] = item;
+            else careItems.push(item);
+
+            saveToLocalCache();
+            renderAll();
+
+            if (isCloudActive && currentUser && db) {
+                try {
+                    await setDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'care_records', item.id), item);
+                } catch (e) {}
+            }
+        }
+
+        async function deleteCareFromStorage(id) {
+            careItems = careItems.filter(c => c.id !== id);
+            saveToLocalCache();
+            renderAll();
+
+            if (isCloudActive && currentUser && db) {
+                try {
+                    await deleteDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'care_records', id));
+                } catch (e) {}
+            }
+        }
+
+        // --- Cálculos de peso ---
         function getSortedCatRecords(catName) {
             return records
                 .filter(r => r.cat === catName)
                 .sort((a, b) => a.date.localeCompare(b.date) || (a.timestamp || 0) - (b.timestamp || 0));
         }
 
-        // Enrich records with delta compared to previous measurement of the SAME cat
         function getEnrichedRecords() {
             const byCat = { Enzo: [], Gael: [] };
             const sortedAsc = [...records].sort((a, b) => a.date.localeCompare(b.date) || (a.timestamp || 0) - (b.timestamp || 0));
@@ -877,13 +1359,11 @@
                 enrichedMap.set(rec.id, { ...rec, delta, deltaPct });
             });
 
-            // Return sorted descending (newest first) for table
             return Array.from(enrichedMap.values()).sort((a, b) => b.date.localeCompare(a.date) || (b.timestamp || 0) - (a.timestamp || 0));
         }
 
-        // --- Rendering Summary Cards ---
+        // --- Renderizado de tarjetas principales ---
         function renderSummaryCards() {
-            // Sync quick birth date inputs
             const quickEnzo = document.getElementById('quickBirthEnzo');
             const quickGael = document.getElementById('quickBirthGael');
             if (quickEnzo && profiles.Enzo.birthDate) quickEnzo.value = profiles.Enzo.birthDate;
@@ -895,11 +1375,9 @@
                 const list = getSortedCatRecords(cat);
                 const profile = profiles[cat];
 
-                // Update subtitle & target
                 const bioPart = profile.bio ? ` • ${profile.bio}` : '';
                 document.getElementById(`${catKey}-subtitle`).textContent = `Meta ideal: ${profile.idealWeight.toFixed(2)} kg${bioPart}`;
 
-                // Update Live Exact Age
                 const ageInfo = calculateExactAge(profile.birthDate);
                 const exactAgeEl = document.getElementById(`${catKey}-exact-age`);
                 const daysLivedEl = document.getElementById(`${catKey}-days-lived`);
@@ -908,10 +1386,9 @@
                 if (ageInfo && !ageInfo.isFuture) {
                     exactAgeEl.textContent = ageInfo.formatted;
                     daysLivedEl.textContent = `${ageInfo.totalDays.toLocaleString('es-CO')} días de vida`;
-                    const bdayMsg = ageInfo.daysToBirthday === 0
-                        ? '🎉 ¡Hoy es su cumpleaños!'
+                    nextBdayEl.textContent = ageInfo.daysToBirthday === 0
+                        ? '🎉 ¡Hoy está de cumpleaños!'
                         : `Cumple en ${ageInfo.daysToBirthday} ${ageInfo.daysToBirthday === 1 ? 'día' : 'días'} (${formatShortDate(profile.birthDate)})`;
-                    nextBdayEl.textContent = bdayMsg;
                 } else {
                     exactAgeEl.textContent = 'Sin fecha de nacimiento';
                     daysLivedEl.textContent = '-- días';
@@ -932,7 +1409,7 @@
                         ? 'mt-1 inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-bold bg-slate-800 text-slate-400'
                         : 'mt-1 inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-500';
                     deltaBadge.innerHTML = '<span>Sin datos</span>';
-                    deltaPctEl.textContent = 'Agrega el 1er peso';
+                    deltaPctEl.textContent = 'Agrega el primer peso';
                     avgEl.textContent = '-- kg';
                     idealDiffEl.textContent = `Meta: ${profile.idealWeight.toFixed(2)} kg`;
                     return;
@@ -942,27 +1419,24 @@
                 currentEl.textContent = latest.weight.toFixed(2);
                 dateEl.textContent = formatReadableDate(latest.date);
 
-                // Average
                 const sum = list.reduce((acc, r) => acc + r.weight, 0);
                 const avg = sum / list.length;
                 avgEl.textContent = `${avg.toFixed(2)} kg`;
 
-                // Diff vs Ideal
                 const diffIdeal = latest.weight - profile.idealWeight;
                 const signIdeal = diffIdeal > 0 ? '+' : '';
                 if (Math.abs(diffIdeal) <= 0.1) {
-                    idealDiffEl.textContent = `¡En su peso ideal! (${profile.idealWeight.toFixed(2)} kg)`;
+                    idealDiffEl.textContent = `En su peso ideal (${profile.idealWeight.toFixed(2)} kg)`;
                     idealDiffEl.className = isGael
                         ? 'text-[11px] text-emerald-400 font-semibold block mt-0.5'
                         : 'text-[11px] text-emerald-600 font-semibold block mt-0.5';
                 } else {
-                    idealDiffEl.textContent = `${signIdeal}${diffIdeal.toFixed(2)} kg vs meta (${profile.idealWeight.toFixed(2)})`;
+                    idealDiffEl.textContent = `${signIdeal}${diffIdeal.toFixed(2)} kg frente a meta (${profile.idealWeight.toFixed(2)})`;
                     idealDiffEl.className = isGael
                         ? 'text-[11px] text-slate-400 font-medium block mt-0.5'
                         : 'text-[11px] text-slate-500 font-medium block mt-0.5';
                 }
 
-                // Delta vs Previous
                 if (list.length >= 2) {
                     const prev = list[list.length - 2];
                     const delta = latest.weight - prev.weight;
@@ -980,44 +1454,43 @@
                             ? 'mt-1 inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-bold bg-emerald-950/90 text-emerald-300 border border-emerald-700/50'
                             : 'mt-1 inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-bold bg-emerald-100 text-emerald-800';
                         deltaBadge.innerHTML = `<i class="ph-bold ph-trend-up"></i> +${delta.toFixed(2)} kg`;
-                        deltaPctEl.textContent = `${sign}${pct.toFixed(1)}% vs anterior`;
+                        deltaPctEl.textContent = `${sign}${pct.toFixed(1)}% respecto al anterior`;
                     } else {
                         deltaBadge.className = isGael
                             ? 'mt-1 inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-bold bg-amber-950/90 text-amber-300 border border-amber-700/50'
                             : 'mt-1 inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-bold bg-amber-100 text-amber-800';
                         deltaBadge.innerHTML = `<i class="ph-bold ph-trend-down"></i> ${delta.toFixed(2)} kg`;
-                        deltaPctEl.textContent = `${pct.toFixed(1)}% vs anterior`;
+                        deltaPctEl.textContent = `${pct.toFixed(1)}% respecto al anterior`;
                     }
                 } else {
                     deltaBadge.className = isGael
                         ? 'mt-1 inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-bold bg-slate-800 text-slate-300'
                         : 'mt-1 inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-600';
-                    deltaBadge.innerHTML = `<span>1ra toma</span>`;
-                    deltaPctEl.textContent = 'Base inicial';
+                    deltaBadge.innerHTML = `<span>Primera toma</span>`;
+                    deltaPctEl.textContent = 'Registro inicial';
                 }
             });
 
-            // Highlight or filter cards according to activeViewFilter
             const cardEnzo = document.getElementById('card-Enzo');
             const cardGael = document.getElementById('card-Gael');
             if (activeViewFilter === 'Enzo') {
                 cardEnzo.classList.remove('opacity-50');
-                cardGael.classList.add('opacity-60');
+                cardGael.classList.add('opacity-55');
             } else if (activeViewFilter === 'Gael') {
                 cardGael.classList.remove('opacity-50');
-                cardEnzo.classList.add('opacity-60');
+                cardEnzo.classList.add('opacity-55');
             } else {
-                cardEnzo.classList.remove('opacity-50', 'opacity-60');
-                cardGael.classList.remove('opacity-50', 'opacity-60');
+                cardEnzo.classList.remove('opacity-50', 'opacity-55');
+                cardGael.classList.remove('opacity-50', 'opacity-55');
             }
         }
 
-        // --- Rendering Chart.js Evolution Curve (White vs Black High-Contrast Styling) ---
+        // --- Renderizado de la gráfica de peso ---
         function renderChart() {
             const canvas = document.getElementById('weightChart');
             const overlay = document.getElementById('emptyChartOverlay');
+            if (!canvas || !overlay) return;
 
-            // Filter by date cutoff if chartRangeDays > 0
             let cutoffDateStr = '0000-00-00';
             if (chartRangeDays > 0) {
                 const d = new Date();
@@ -1032,22 +1505,15 @@
             const showGael = activeViewFilter === 'all' || activeViewFilter === 'Gael';
 
             const totalVisiblePoints = (showEnzo ? enzoRecords.length : 0) + (showGael ? gaelRecords.length : 0);
+            if (totalVisiblePoints === 0) overlay.classList.remove('hidden');
+            else overlay.classList.add('hidden');
 
-            if (totalVisiblePoints === 0) {
-                overlay.classList.remove('hidden');
-            } else {
-                overlay.classList.add('hidden');
-            }
-
-            // Collect unique sorted dates across visible datasets
             const dateSet = new Set();
             if (showEnzo) enzoRecords.forEach(r => dateSet.add(r.date));
             if (showGael) gaelRecords.forEach(r => dateSet.add(r.date));
             const sortedDates = Array.from(dateSet).sort();
 
             const labels = sortedDates.map(d => formatShortDate(d));
-
-            // Map weights to aligned date labels
             const mapDataToDates = (catRecs) => {
                 const byDate = {};
                 catRecs.forEach(r => { byDate[r.date] = r.weight; });
@@ -1055,11 +1521,9 @@
             };
 
             const datasets = [];
-
             if (showEnzo) {
-                // Enzo: Pure White Line with Dark Slate Point Borders so it pops sharply against the neutral slate canvas
                 datasets.push({
-                    label: 'Enzo • Persa Blanco (kg)',
+                    label: 'Enzo • Persa blanco (kg)',
                     data: mapDataToDates(enzoRecords),
                     borderColor: '#ffffff',
                     backgroundColor: 'rgba(255, 255, 255, 0.35)',
@@ -1076,9 +1540,8 @@
             }
 
             if (showGael) {
-                // Gael: Deep Obsidian Black Line with crisp White Point Borders
                 datasets.push({
-                    label: 'Gael • Persa Negro (kg)',
+                    label: 'Gael • Persa negro (kg)',
                     data: mapDataToDates(gaelRecords),
                     borderColor: '#0f172a',
                     backgroundColor: 'rgba(15, 23, 42, 0.15)',
@@ -1094,9 +1557,7 @@
                 });
             }
 
-            if (weightChartInstance) {
-                weightChartInstance.destroy();
-            }
+            if (weightChartInstance) weightChartInstance.destroy();
 
             weightChartInstance = new Chart(canvas, {
                 type: 'line',
@@ -1104,10 +1565,7 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    interaction: {
-                        mode: 'index',
-                        intersect: false,
-                    },
+                    interaction: { mode: 'index', intersect: false },
                     plugins: {
                         legend: {
                             position: 'top',
@@ -1121,15 +1579,10 @@
                         },
                         tooltip: {
                             backgroundColor: '#0f172a',
-                            titleFont: { family: 'Inter', size: 12, weight: '700' },
-                            bodyFont: { family: 'Inter', size: 12 },
                             padding: 10,
                             cornerRadius: 10,
                             callbacks: {
-                                label: function(context) {
-                                    if (context.parsed.y === null) return null;
-                                    return `${context.dataset.label}: ${context.parsed.y.toFixed(2)} kg`;
-                                }
+                                label: (ctx) => ctx.parsed.y !== null ? `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2)} kg` : null
                             }
                         }
                     },
@@ -1151,12 +1604,14 @@
             });
         }
 
-        // --- Rendering History Table ---
+        // --- Renderizado de la tabla de pesajes ---
         function renderTable() {
             const tbody = document.getElementById('historyTableBody');
             const emptyState = document.getElementById('emptyTableState');
             const countLabel = document.getElementById('historyCountLabel');
-            const searchQuery = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+            if (!tbody || !emptyState) return;
+
+            const searchQuery = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
 
             const enriched = getEnrichedRecords().filter(rec => {
                 if (activeViewFilter !== 'all' && rec.cat !== activeViewFilter) return false;
@@ -1181,13 +1636,12 @@
             tbody.innerHTML = enriched.map(rec => {
                 const isEnzo = rec.cat === 'Enzo';
                 const badgeClass = isEnzo
-                    ? 'bg-white text-slate-900 border-slate-300 shadow-2xs'
+                    ? 'bg-white text-slate-900 border-slate-300'
                     : 'bg-slate-900 text-white border-slate-800';
                 const dotClass = isEnzo
                     ? 'bg-white border border-slate-500'
                     : 'bg-slate-950 border border-slate-400';
 
-                // Calculate cat's age at the time of this specific weight record
                 const birthDate = profiles[rec.cat]?.birthDate;
                 const ageAtRecord = calculateExactAge(birthDate, rec.date);
                 const ageBadgeHtml = (ageAtRecord && !ageAtRecord.isFuture)
@@ -1197,11 +1651,11 @@
                 let deltaHtml = '<span class="text-xs text-slate-400">Inicial</span>';
                 if (rec.delta !== null) {
                     if (Math.abs(rec.delta) < 0.01) {
-                        deltaHtml = `<span class="inline-flex items-center gap-1 text-xs font-semibold text-slate-500">0.00 kg</span>`;
+                        deltaHtml = `<span class="text-xs font-semibold text-slate-500">0.00 kg</span>`;
                     } else if (rec.delta > 0) {
-                        deltaHtml = `<span class="inline-flex items-center gap-0.5 text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">+${rec.delta.toFixed(2)} kg</span>`;
+                        deltaHtml = `<span class="inline-flex items-center text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">+${rec.delta.toFixed(2)} kg</span>`;
                     } else {
-                        deltaHtml = `<span class="inline-flex items-center gap-0.5 text-xs font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md">${rec.delta.toFixed(2)} kg</span>`;
+                        deltaHtml = `<span class="inline-flex items-center text-xs font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md">${rec.delta.toFixed(2)} kg</span>`;
                     }
                 }
 
@@ -1216,16 +1670,12 @@
                         <td class="py-3 px-4 whitespace-nowrap text-xs font-semibold text-slate-700">
                             ${formatReadableDate(rec.date)}
                         </td>
-                        <td class="py-3 px-4 whitespace-nowrap">
-                            ${ageBadgeHtml}
-                        </td>
+                        <td class="py-3 px-4 whitespace-nowrap">${ageBadgeHtml}</td>
                         <td class="py-3 px-4 whitespace-nowrap">
                             <span class="font-extrabold text-slate-900">${rec.weight.toFixed(2)}</span>
                             <span class="text-xs text-slate-400 font-semibold">kg</span>
                         </td>
-                        <td class="py-3 px-4 whitespace-nowrap">
-                            ${deltaHtml}
-                        </td>
+                        <td class="py-3 px-4 whitespace-nowrap">${deltaHtml}</td>
                         <td class="py-3 px-4 text-xs text-slate-600 max-w-xs truncate" title="${escapeHtml(rec.notes || '')}">
                             ${rec.notes ? escapeHtml(rec.notes) : '<span class="text-slate-300">—</span>'}
                         </td>
@@ -1244,18 +1694,206 @@
             }).join('');
         }
 
+        // --- Renderizado de Exámenes de Sangre y Hormonas ---
+        function populateBloodParametersSelect() {
+            const select = document.getElementById('bloodParamSelect');
+            if (!select) return;
+            select.innerHTML = Object.keys(LIMITES_REFERENCIA_SANGRE).map(key => {
+                const info = LIMITES_REFERENCIA_SANGRE[key];
+                return `<option value="${key}">${info.nombre} (${info.min} - ${info.max} ${info.unidad})</option>`;
+            }).join('');
+            window.handleBloodParamChange();
+
+            const refGrid = document.getElementById('referenceLimitsGrid');
+            if (refGrid) {
+                refGrid.innerHTML = Object.keys(LIMITES_REFERENCIA_SANGRE).map(key => {
+                    const info = LIMITES_REFERENCIA_SANGRE[key];
+                    return `
+                        <div class="p-2.5 rounded-lg bg-white border border-slate-200 flex items-center justify-between gap-2">
+                            <div>
+                                <span class="font-bold text-slate-800 block">${key}</span>
+                                <span class="text-[11px] text-slate-500">${info.categoria}</span>
+                            </div>
+                            <span class="font-extrabold text-slate-900 bg-slate-100 px-2 py-1 rounded-md">${info.min} – ${info.max} ${info.unidad}</span>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        window.handleBloodParamChange = function() {
+            const key = document.getElementById('bloodParamSelect')?.value;
+            const info = LIMITES_REFERENCIA_SANGRE[key];
+            if (!info) return;
+            document.getElementById('bloodUnitLabel').textContent = info.unidad;
+            document.getElementById('bloodRefPreview').textContent = `${info.min} – ${info.max} ${info.unidad}`;
+        };
+
+        function renderBloodTable() {
+            const tbody = document.getElementById('bloodTableBody');
+            const emptyState = document.getElementById('emptyBloodState');
+            if (!tbody || !emptyState) return;
+
+            const filtered = [...bloodTests]
+                .filter(b => activeViewFilter === 'all' || b.cat === activeViewFilter)
+                .sort((a, b) => b.date.localeCompare(a.date));
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            tbody.innerHTML = filtered.map(item => {
+                const isEnzo = item.cat === 'Enzo';
+                const badgeClass = isEnzo
+                    ? 'bg-white text-slate-900 border-slate-300'
+                    : 'bg-slate-900 text-white border-slate-800';
+                const ref = LIMITES_REFERENCIA_SANGRE[item.param] || { nombre: item.param, min: 0, max: 100, unidad: '' };
+
+                let statusHtml = `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800"><i class="ph-bold ph-check"></i> Normal</span>`;
+                if (item.value < ref.min) {
+                    statusHtml = `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800"><i class="ph-bold ph-arrow-down"></i> Bajo</span>`;
+                } else if (item.value > ref.max) {
+                    statusHtml = `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-rose-100 text-rose-800"><i class="ph-bold ph-arrow-up"></i> Alto</span>`;
+                }
+
+                return `
+                    <tr class="hover:bg-slate-50/90 transition">
+                        <td class="py-3 px-3.5 whitespace-nowrap">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold border ${badgeClass}">
+                                ${item.cat}
+                            </span>
+                        </td>
+                        <td class="py-3 px-3.5 whitespace-nowrap text-xs font-semibold text-slate-700">${formatReadableDate(item.date)}</td>
+                        <td class="py-3 px-3.5">
+                            <span class="font-bold text-slate-900 block">${item.param}</span>
+                            <span class="text-[11px] text-slate-400">${ref.nombre}</span>
+                        </td>
+                        <td class="py-3 px-3.5 whitespace-nowrap">
+                            <span class="font-extrabold text-slate-900 text-sm">${Number(item.value).toFixed(2)}</span>
+                            <span class="text-[11px] text-slate-500 font-semibold">${ref.unidad}</span>
+                        </td>
+                        <td class="py-3 px-3.5 whitespace-nowrap text-xs font-medium text-slate-600">
+                            ${ref.min} – ${ref.max} ${ref.unidad}
+                        </td>
+                        <td class="py-3 px-3.5 whitespace-nowrap">${statusHtml}</td>
+                        <td class="py-3 px-3.5 text-xs text-slate-600 max-w-[180px] truncate" title="${escapeHtml(item.notes || '')}">
+                            ${item.notes ? escapeHtml(item.notes) : '<span class="text-slate-300">—</span>'}
+                        </td>
+                        <td class="py-3 px-3.5 whitespace-nowrap text-right">
+                            <button onclick="editBloodRecord('${item.id}')" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100" title="Editar">
+                                <i class="ph-bold ph-pencil-simple text-sm"></i>
+                            </button>
+                            <button onclick="promptDeleteBlood('${item.id}')" class="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50" title="Eliminar">
+                                <i class="ph-bold ph-trash text-sm"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // --- Renderizado del Catálogo Virtual de Cuidados y Medicamentos ---
+        function calculateCareStatus(lastDateStr, freqDays) {
+            const parts = lastDateStr.split('-').map(Number);
+            const lastDate = new Date(parts[0], parts[1] - 1, parts[2]);
+            const nextDate = new Date(lastDate);
+            nextDate.setDate(nextDate.getDate() + Number(freqDays));
+
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const diffDays = Math.round((nextDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+            const nextDateStr = nextDate.toISOString().split('T')[0];
+
+            return { nextDateStr, diffDays };
+        }
+
+        function renderCareCatalog() {
+            const grid = document.getElementById('careCardsGrid');
+            const emptyState = document.getElementById('emptyCareState');
+            if (!grid || !emptyState) return;
+
+            const filtered = [...careItems]
+                .filter(c => activeViewFilter === 'all' || c.cat === activeViewFilter)
+                .map(c => ({ ...c, ...calculateCareStatus(c.lastDate, c.freqDays) }))
+                .sort((a, b) => a.diffDays - b.diffDays);
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            grid.innerHTML = filtered.map(item => {
+                const isEnzo = item.cat === 'Enzo';
+                const catPill = isEnzo
+                    ? 'bg-white text-slate-900 border-slate-300'
+                    : 'bg-slate-900 text-white border-slate-800';
+
+                let statusBadge = '';
+                if (item.diffDays < 0) {
+                    statusBadge = `<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-rose-100 text-rose-800">Vencido hace ${Math.abs(item.diffDays)} ${Math.abs(item.diffDays) === 1 ? 'día' : 'días'}</span>`;
+                } else if (item.diffDays === 0) {
+                    statusBadge = `<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800">Toca hoy</span>`;
+                } else if (item.diffDays <= 5) {
+                    statusBadge = `<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200">En ${item.diffDays} ${item.diffDays === 1 ? 'día' : 'días'}</span>`;
+                } else {
+                    statusBadge = `<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">En ${item.diffDays} días</span>`;
+                }
+
+                return `
+                    <div class="p-4 rounded-2xl border border-slate-200 bg-white shadow-2xs flex flex-col justify-between gap-3 hover:border-slate-300 transition">
+                        <div>
+                            <div class="flex items-center justify-between gap-2">
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${catPill}">
+                                    ${item.cat} • ${escapeHtml(item.type)}
+                                </span>
+                                ${statusBadge}
+                            </div>
+                            <h5 class="font-bold text-sm text-slate-900 mt-2">${escapeHtml(item.title)}</h5>
+                            ${item.dose ? `<p class="text-xs text-slate-500 mt-0.5">${escapeHtml(item.dose)}</p>` : ''}
+                        </div>
+
+                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2 text-xs">
+                            <div>
+                                <span class="text-slate-400 block text-[11px]">Última vez: <strong class="text-slate-700">${formatReadableDate(item.lastDate)}</strong> (cada ${item.freqDays} d)</span>
+                                <span class="text-slate-500 block text-[11px]">Próxima fecha: <strong class="text-slate-900">${formatReadableDate(item.nextDateStr)}</strong></span>
+                            </div>
+
+                            <div class="flex items-center gap-1 shrink-0">
+                                <button onclick="markCareDoneToday('${item.id}')" class="px-2.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-[11px] font-bold transition flex items-center gap-1" title="Actualizar última fecha al día de hoy">
+                                    <i class="ph-bold ph-check"></i> Hecho hoy
+                                </button>
+                                <button onclick="editCareRecord('${item.id}')" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100" title="Editar">
+                                    <i class="ph-bold ph-pencil-simple"></i>
+                                </button>
+                                <button onclick="promptDeleteCare('${item.id}')" class="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50" title="Eliminar">
+                                    <i class="ph-bold ph-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
         function renderAll() {
             renderSummaryCards();
             renderChart();
             renderTable();
+            renderBloodTable();
+            renderCareCatalog();
         }
 
-        // --- Date & Text Formatting Helpers ---
+        // --- Utilidades de formato ---
         function formatReadableDate(dateStr) {
             if (!dateStr) return '';
             const parts = dateStr.split('-');
             if (parts.length !== 3) return dateStr;
-            const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+            const months = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
             const m = parseInt(parts[1], 10) - 1;
             return `${parseInt(parts[2], 10)} ${months[m] || parts[1]} ${parts[0]}`;
         }
@@ -1264,16 +1902,69 @@
             if (!dateStr) return '';
             const parts = dateStr.split('-');
             if (parts.length !== 3) return dateStr;
-            const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+            const months = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
             const m = parseInt(parts[1], 10) - 1;
             return `${parseInt(parts[2], 10)} ${months[m]} '${parts[0].slice(2)}`;
         }
 
         function escapeHtml(str) {
-            return str.replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+            return String(str).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
         }
 
-        // --- Interactive Event Handlers Exposed to Window ---
+        // --- Eventos de interfaz ---
+        window.setSectionTab = function(tab) {
+            activeSectionTab = tab;
+            ['todos', 'peso', 'hormonas', 'cuidados'].forEach(t => {
+                const btn = document.getElementById(`sec-${t}`);
+                if (!btn) return;
+                if (t === tab) {
+                    btn.className = 'flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all bg-slate-900 text-white shadow-sm whitespace-nowrap';
+                } else {
+                    btn.className = 'flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all text-slate-600 hover:bg-slate-100 whitespace-nowrap';
+                }
+            });
+
+            const modPeso = document.getElementById('module-peso');
+            const modHormonas = document.getElementById('module-hormonas');
+            const modCuidados = document.getElementById('module-cuidados');
+
+            modPeso.classList.toggle('hidden', tab !== 'todos' && tab !== 'peso');
+            modHormonas.classList.toggle('hidden', tab !== 'todos' && tab !== 'hormonas');
+            modCuidados.classList.toggle('hidden', tab !== 'todos' && tab !== 'cuidados');
+            if (tab === 'todos' || tab === 'peso') renderChart();
+        };
+
+        window.setViewFilter = function(filter) {
+            activeViewFilter = filter;
+            ['all', 'Enzo', 'Gael'].forEach(tab => {
+                const btn = document.getElementById(`tab-${tab}`);
+                if (tab === filter) {
+                    btn.className = 'flex-1 sm:flex-initial flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-slate-900 text-white shadow-sm';
+                } else {
+                    btn.className = 'flex-1 sm:flex-initial flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-600 hover:bg-slate-100';
+                }
+            });
+            if (filter === 'Enzo' || filter === 'Gael') {
+                window.selectFormCat(filter);
+                document.getElementById('bloodCatInput').value = filter;
+                document.getElementById('careCatInput').value = filter;
+            }
+            renderAll();
+        };
+
+        window.setChartRange = function(days) {
+            chartRangeDays = days;
+            [90, 180, 365, 0].forEach(d => {
+                const btn = document.getElementById(`range-${d}`);
+                if (d === days) {
+                    btn.className = 'px-2.5 py-1 rounded-lg text-xs font-semibold transition bg-white text-slate-900 shadow-sm';
+                } else {
+                    btn.className = 'px-2.5 py-1 rounded-lg text-xs font-semibold transition text-slate-600 hover:text-slate-900';
+                }
+            });
+            renderChart();
+        };
+
         window.selectFormCat = function(cat) {
             document.getElementById('selectedCatInput').value = cat;
             const btnEnzo = document.getElementById('btnSelectEnzo');
@@ -1289,6 +1980,7 @@
         };
 
         window.quickSelectCat = function(cat) {
+            window.setSectionTab('todos');
             window.selectFormCat(cat);
             const weightInput = document.getElementById('weightInput');
             weightInput.focus();
@@ -1297,13 +1989,11 @@
 
         window.appendNote = function(text) {
             const input = document.getElementById('notesInput');
-            if (!input.value.trim()) {
-                input.value = text;
-            } else if (!input.value.includes(text)) {
-                input.value = `${input.value.trim()}, ${text}`;
-            }
+            if (!input.value.trim()) input.value = text;
+            else if (!input.value.includes(text)) input.value = `${input.value.trim()}, ${text}`;
         };
 
+        // --- Envío y edición de Peso ---
         window.handleFormSubmit = async function(e) {
             e.preventDefault();
             const cat = document.getElementById('selectedCatInput').value;
@@ -1313,11 +2003,7 @@
             const editId = document.getElementById('editRecordId').value;
 
             if (isNaN(weightVal) || weightVal <= 0 || weightVal > 30) {
-                showToast("Ingresa un peso válido en kg", "error");
-                return;
-            }
-            if (!dateVal) {
-                showToast("Selecciona una fecha válida", "error");
+                showToast("Ingresa un peso válido en kilogramos", "error");
                 return;
             }
 
@@ -1339,32 +2025,156 @@
             document.getElementById('editRecordId').value = '';
             document.getElementById('weightInput').value = '';
             document.getElementById('notesInput').value = '';
-            setDefaultDate();
-            document.getElementById('formTitle').textContent = 'Registrar Nuevo Peso';
-            document.getElementById('submitBtnText').textContent = 'Guardar Registro';
+            document.getElementById('dateInput').value = new Date().toISOString().split('T')[0];
+            document.getElementById('formTitle').textContent = 'Registrar nuevo peso';
+            document.getElementById('submitBtnText').textContent = 'Guardar registro';
             document.getElementById('cancelEditBtn').classList.add('hidden');
         };
 
         window.editRecord = function(id) {
             const rec = records.find(r => r.id === id);
             if (!rec) return;
-
             document.getElementById('editRecordId').value = rec.id;
             window.selectFormCat(rec.cat);
             document.getElementById('weightInput').value = rec.weight;
             document.getElementById('dateInput').value = rec.date;
             document.getElementById('notesInput').value = rec.notes || '';
-
             document.getElementById('formTitle').textContent = `Editando peso de ${rec.cat}`;
-            document.getElementById('submitBtnText').textContent = 'Actualizar Registro';
+            document.getElementById('submitBtnText').textContent = 'Actualizar registro';
             document.getElementById('cancelEditBtn').classList.remove('hidden');
-
             document.getElementById('weightFormContainer').scrollIntoView({ behavior: 'smooth', block: 'center' });
         };
 
-        // --- Confirmation Modal Logic ---
-        let pendingConfirmAction = null;
+        // --- Envío y edición de Exámenes de Sangre y Hormonas ---
+        window.handleBloodSubmit = async function(e) {
+            e.preventDefault();
+            const editId = document.getElementById('editBloodId').value;
+            const cat = document.getElementById('bloodCatInput').value;
+            const date = document.getElementById('bloodDateInput').value;
+            const param = document.getElementById('bloodParamSelect').value;
+            const value = parseFloat(document.getElementById('bloodValueInput').value);
+            const notes = document.getElementById('bloodNotesInput').value.trim();
 
+            if (isNaN(value)) {
+                showToast("Ingresa un valor numérico válido", "error");
+                return;
+            }
+
+            const item = {
+                id: editId || `b-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+                cat,
+                date,
+                param,
+                value,
+                notes,
+                timestamp: Date.now()
+            };
+
+            await saveBloodToStorage(item);
+            showToast(editId ? `Resultado de ${cat} actualizado` : `Examen de ${param} (${cat}) guardado`);
+            window.resetBloodForm();
+        };
+
+        window.resetBloodForm = function() {
+            document.getElementById('editBloodId').value = '';
+            document.getElementById('bloodValueInput').value = '';
+            document.getElementById('bloodNotesInput').value = '';
+            document.getElementById('bloodDateInput').value = new Date().toISOString().split('T')[0];
+            document.getElementById('bloodFormTitle').textContent = 'Añadir resultado de laboratorio';
+            document.getElementById('bloodSubmitText').textContent = 'Guardar resultado clínico';
+            document.getElementById('cancelBloodEditBtn').classList.add('hidden');
+        };
+
+        window.editBloodRecord = function(id) {
+            const item = bloodTests.find(b => b.id === id);
+            if (!item) return;
+            document.getElementById('editBloodId').value = item.id;
+            document.getElementById('bloodCatInput').value = item.cat;
+            document.getElementById('bloodDateInput').value = item.date;
+            document.getElementById('bloodParamSelect').value = item.param;
+            window.handleBloodParamChange();
+            document.getElementById('bloodValueInput').value = item.value;
+            document.getElementById('bloodNotesInput').value = item.notes || '';
+            document.getElementById('bloodFormTitle').textContent = `Editando examen de ${item.cat}`;
+            document.getElementById('bloodSubmitText').textContent = 'Actualizar resultado';
+            document.getElementById('cancelBloodEditBtn').classList.remove('hidden');
+            document.getElementById('bloodForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        };
+
+        // --- Envío y edición del Catálogo de Cuidados y Medicamentos ---
+        window.handleCareTypePreset = function() {
+            const type = document.getElementById('careTypeInput').value;
+            const freqInput = document.getElementById('careFreqDaysInput');
+            if (type === 'Baño y secado') freqInput.value = 30;
+            else if (type === 'Corte de uñas') freqInput.value = 15;
+            else if (type === 'Desparasitación') freqInput.value = 90;
+            else if (type === 'Limpieza ocular y cepillado') freqInput.value = 2;
+            else if (type === 'Medicamento') freqInput.value = 1;
+            else if (type === 'Vacunación') freqInput.value = 365;
+        };
+
+        window.handleCareSubmit = async function(e) {
+            e.preventDefault();
+            const editId = document.getElementById('editCareId').value;
+            const cat = document.getElementById('careCatInput').value;
+            const type = document.getElementById('careTypeInput').value;
+            const title = document.getElementById('careTitleInput').value.trim();
+            const lastDate = document.getElementById('careLastDateInput').value;
+            const freqDays = parseInt(document.getElementById('careFreqDaysInput').value, 10) || 30;
+            const dose = document.getElementById('careDoseInput').value.trim();
+
+            const item = {
+                id: editId || `c-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+                cat,
+                type,
+                title,
+                lastDate,
+                freqDays,
+                dose,
+                timestamp: Date.now()
+            };
+
+            await saveCareToStorage(item);
+            showToast(editId ? `Cuidado de ${cat} actualizado` : `${type} de ${cat} guardado en el catálogo`);
+            window.resetCareForm();
+        };
+
+        window.resetCareForm = function() {
+            document.getElementById('editCareId').value = '';
+            document.getElementById('careTitleInput').value = '';
+            document.getElementById('careDoseInput').value = '';
+            document.getElementById('careLastDateInput').value = new Date().toISOString().split('T')[0];
+            document.getElementById('careFormTitle').textContent = 'Programar cuidado o medicamento';
+            document.getElementById('careSubmitText').textContent = 'Guardar en el catálogo';
+            document.getElementById('cancelCareEditBtn').classList.add('hidden');
+        };
+
+        window.editCareRecord = function(id) {
+            const item = careItems.find(c => c.id === id);
+            if (!item) return;
+            document.getElementById('editCareId').value = item.id;
+            document.getElementById('careCatInput').value = item.cat;
+            document.getElementById('careTypeInput').value = item.type;
+            document.getElementById('careTitleInput').value = item.title;
+            document.getElementById('careLastDateInput').value = item.lastDate;
+            document.getElementById('careFreqDaysInput').value = item.freqDays;
+            document.getElementById('careDoseInput').value = item.dose || '';
+            document.getElementById('careFormTitle').textContent = `Editando cuidado de ${item.cat}`;
+            document.getElementById('careSubmitText').textContent = 'Actualizar cuidado';
+            document.getElementById('cancelCareEditBtn').classList.remove('hidden');
+            document.getElementById('careForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        };
+
+        window.markCareDoneToday = async function(id) {
+            const item = careItems.find(c => c.id === id);
+            if (!item) return;
+            const today = new Date().toISOString().split('T')[0];
+            await saveCareToStorage({ ...item, lastDate: today, timestamp: Date.now() });
+            showToast(`¡${item.type} de ${item.cat} registrado con fecha de hoy!`);
+        };
+
+        // --- Modal de confirmación ---
+        let pendingConfirmAction = null;
         function openConfirmModal(title, message, onConfirm) {
             document.getElementById('confirmTitle').textContent = title;
             document.getElementById('confirmMessage').textContent = message;
@@ -1386,11 +2196,37 @@
             const rec = records.find(r => r.id === id);
             if (!rec) return;
             openConfirmModal(
-                `¿Eliminar registro de ${rec.cat}?`,
-                `Se borrará el pesaje de ${rec.weight.toFixed(2)} kg del ${formatReadableDate(rec.date)}.`,
+                `¿Eliminar pesaje de ${rec.cat}?`,
+                `Se borrará el registro de ${rec.weight.toFixed(2)} kg del ${formatReadableDate(rec.date)}.`,
                 async () => {
                     await deleteRecordFromStorage(id);
-                    showToast("Registro eliminado");
+                    showToast("Registro de peso eliminado");
+                }
+            );
+        };
+
+        window.promptDeleteBlood = function(id) {
+            const item = bloodTests.find(b => b.id === id);
+            if (!item) return;
+            openConfirmModal(
+                `¿Eliminar examen de ${item.cat}?`,
+                `Se borrará el resultado de ${item.param} (${item.value}) del ${formatReadableDate(item.date)}.`,
+                async () => {
+                    await deleteBloodFromStorage(id);
+                    showToast("Resultado de examen eliminado");
+                }
+            );
+        };
+
+        window.promptDeleteCare = function(id) {
+            const item = careItems.find(c => c.id === id);
+            if (!item) return;
+            openConfirmModal(
+                `¿Eliminar cuidado de ${item.cat}?`,
+                `Se eliminará "${item.title}" del catálogo de cuidados.`,
+                async () => {
+                    await deleteCareFromStorage(id);
+                    showToast("Elemento eliminado del catálogo");
                 }
             );
         };
@@ -1399,38 +2235,19 @@
             closeDataModal();
             openConfirmModal(
                 "¿Borrar todos los registros?",
-                "Se eliminarán todos los pesajes actuales de Enzo y Gael para empezar desde cero.",
+                "Se vaciarán los pesajes, exámenes de sangre y cuidados para empezar desde cero.",
                 async () => {
-                    const ids = records.map(r => r.id);
                     records = [];
+                    bloodTests = [];
+                    careItems = [];
+                    saveToLocalCache();
                     renderAll();
-                    if (isCloudActive && currentUser && db) {
-                        for (const id of ids) {
-                            try {
-                                await deleteDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'weight_records', id));
-                            } catch (e) {}
-                        }
-                    }
-                    showToast("Historial vaciado correctamente");
+                    showToast("Catálogo vaciado correctamente");
                 }
             );
         };
 
-        // --- Filter Tabs & Chart Range ---
-        window.setViewFilter = function(filter) {
-            activeViewFilter = filter;
-            ['all', 'Enzo', 'Gael'].forEach(tab => {
-                const btn = document.getElementById(`tab-${tab}`);
-                if (tab === filter) {
-                    btn.className = 'flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-slate-900 text-white shadow-sm';
-                } else {
-                    btn.className = 'flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-600 hover:bg-slate-100';
-                }
-            });
-            if (filter === 'Enzo' || filter === 'Gael') {
-                window.selectFormCat(filter);
-            }
-        // --- Profile & Birthdate Modal ---
+        // --- Modal de Perfiles y Fechas de Nacimiento ---
         window.openProfileModal = function() {
             document.getElementById('birthEnzoInput').value = profiles.Enzo.birthDate || '2023-05-10';
             document.getElementById('idealEnzoInput').value = profiles.Enzo.idealWeight;
@@ -1445,27 +2262,12 @@
             document.getElementById('profileModal').classList.add('hidden');
         };
 
-        async function persistProfilesToCloud() {
-            if (isCloudActive && currentUser && db) {
-                try {
-                    await setDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'pet_profiles', 'Enzo'), {
-                        cat: 'Enzo', ...profiles.Enzo
-                    });
-                    await setDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'pet_profiles', 'Gael'), {
-                        cat: 'Gael', ...profiles.Gael
-                    });
-                } catch (err) {
-                    console.error("Error guardando perfil:", err);
-                }
-            }
-        }
-
         window.handleQuickBirthChange = async function(cat, newDateVal) {
             if (!newDateVal || !profiles[cat]) return;
             profiles[cat].birthDate = newDateVal;
             renderAll();
-            showToast(`Fecha de nacimiento de ${cat} actualizada`);
             await persistProfilesToCloud();
+            showToast(`Fecha de nacimiento de ${cat} guardada`);
         };
 
         window.saveProfiles = async function(e) {
@@ -1480,11 +2282,11 @@
 
             closeProfileModal();
             renderAll();
-            showToast("Fechas de nacimiento y metas actualizadas");
             await persistProfilesToCloud();
+            showToast("Fechas de nacimiento y metas guardadas");
         };
 
-        // --- Data Modal & Exports ---
+        // --- Exportación e importación ---
         window.openDataModal = function() {
             document.getElementById('dataModal').classList.remove('hidden');
         };
@@ -1494,10 +2296,10 @@
         };
 
         window.loadSampleData = async function() {
-            for (const item of INITIAL_DEMO_RECORDS) {
-                await saveRecordToStorage({ ...item, timestamp: Date.now() });
-            }
-            showToast("Datos de ejemplo de Enzo y Gael cargados");
+            for (const item of INITIAL_DEMO_RECORDS) await saveRecordToStorage({ ...item, timestamp: Date.now() });
+            for (const b of INITIAL_BLOOD_TESTS) await saveBloodToStorage({ ...b, timestamp: Date.now() });
+            for (const c of INITIAL_CARE_ITEMS) await saveCareToStorage({ ...c, timestamp: Date.now() });
+            showToast("Datos de ejemplo cargados");
         };
 
         window.exportCSV = function() {
@@ -1530,13 +2332,15 @@
             const payload = {
                 exportedAt: new Date().toISOString(),
                 profiles,
-                records
+                records,
+                bloodTests,
+                careItems
             };
             const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `respaldo_enzo_gael_${new Date().toISOString().split('T')[0]}.json`;
+            a.download = `respaldo_catalogo_enzo_gael_${new Date().toISOString().split('T')[0]}.json`;
             a.click();
             URL.revokeObjectURL(url);
             showToast("Respaldo JSON descargado");
@@ -1549,28 +2353,15 @@
             reader.onload = async (e) => {
                 try {
                     const data = JSON.parse(e.target.result);
-                    if (Array.isArray(data.records)) {
-                        for (const rec of data.records) {
-                            if (rec.cat && rec.weight && rec.date) {
-                                await saveRecordToStorage({
-                                    id: rec.id || `imp-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
-                                    cat: rec.cat === 'Gael' ? 'Gael' : 'Enzo',
-                                    weight: parseFloat(rec.weight),
-                                    date: rec.date,
-                                    notes: rec.notes || '',
-                                    timestamp: rec.timestamp || Date.now()
-                                });
-                            }
-                        }
-                        if (data.profiles) {
-                            profiles = { ...profiles, ...data.profiles };
-                        }
-                        renderAll();
-                        closeDataModal();
-                        showToast("Respaldo importado con éxito");
-                    } else {
-                        showToast("Formato JSON inválido", "error");
-                    }
+                    if (data.profiles) profiles = { ...profiles, ...data.profiles };
+                    if (Array.isArray(data.records)) records = data.records;
+                    if (Array.isArray(data.bloodTests)) bloodTests = data.bloodTests;
+                    if (Array.isArray(data.careItems)) careItems = data.careItems;
+                    saveToLocalCache();
+                    await persistProfilesToCloud();
+                    renderAll();
+                    closeDataModal();
+                    showToast("Respaldo completo restaurado");
                 } catch (err) {
                     showToast("No se pudo leer el archivo JSON", "error");
                 }
@@ -1579,16 +2370,14 @@
         };
 
         window.renderAll = renderAll;
-
-        // Start App
         window.addEventListener('DOMContentLoaded', initStorage);
     </script>
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js');
-    });
-  }
-</script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(() => {});
+            });
+        }
+    </script>
 </body>
 </html>
