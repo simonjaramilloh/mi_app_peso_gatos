@@ -1137,7 +1137,7 @@
             text.textContent = statusText;
         }
 
-        // --- Inicialización de almacenamiento y Firebase sin duplicados ---
+        // --- Inicialización de almacenamiento y Firebase ---
         async function initStorage() {
             setDefaultDates();
             populateBloodParametersSelect();
@@ -1145,60 +1145,55 @@
             renderAll();
 
             try {
-                const configToUse = (typeof __firebase_config !== 'undefined' && __firebase_config)
-                    ? JSON.parse(__firebase_config)
-                    : USER_FIREBASE_CONFIG;
-
-                const app = getApps().length > 0 ? getApp() : initializeApp(configToUse);
+                // Asegura que Firebase use la variable global firebaseConfig
+                const app = initializeApp(firebaseConfig);
                 auth = getAuth(app);
                 db = getFirestore(app);
 
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    const loginModal = document.getElementById('loginModal');
-            const loginError = document.getElementById('loginError');
-            const emailIn = document.getElementById('emailInput');
-            const passIn = document.getElementById('passwordInput');
+                const loginModal = document.getElementById('loginModal');
+                const loginError = document.getElementById('loginError');
+                const emailIn = document.getElementById('emailInput');
+                const passIn = document.getElementById('passwordInput');
 
-            onAuthStateChanged(auth, (user) => {
-                if (user) {
-                    loginModal.classList.add('hidden');
-                    currentUser = user;
-                    isCloudActive = true;
-                    updateSyncIndicator('Nube Sincronizada', 'bg-emerald-400');
-                    setupFirestoreListeners(user.uid);
-                } else {
-                    loginModal.classList.remove('hidden');
-                    updateSyncIndicator('Esperando conexión', 'bg-amber-400');
-                }
-            });
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        loginModal.classList.add('hidden');
+                        currentUser = user;
+                        isCloudActive = true;
+                        updateSyncIndicator('Nube Sincronizada', 'bg-emerald-400');
+                        setupFirestoreListeners(user.uid);
+                    } else {
+                        loginModal.classList.remove('hidden');
+                        updateSyncIndicator('Esperando conexión', 'bg-amber-400');
+                    }
+                });
 
-            document.getElementById('loginForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                try {
-                    await signInWithEmailAndPassword(auth, emailIn.value, passIn.value);
-                } catch (err) {
-                    loginError.textContent = "Error al entrar. Revisa el correo o la contraseña.";
-                    loginError.classList.remove('hidden');
-                }
-            });
+                document.getElementById('loginForm').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    try {
+                        await signInWithEmailAndPassword(auth, emailIn.value, passIn.value);
+                    } catch (err) {
+                        loginError.textContent = "Error al entrar. Revisa el correo o la contraseña.";
+                        loginError.classList.remove('hidden');
+                    }
+                });
 
-            document.getElementById('btnRegister').addEventListener('click', async () => {
-                if(!emailIn.value || !passIn.value) {
-                    loginError.textContent = "Escribe un correo y contraseña para crear la cuenta.";
-                    loginError.classList.remove('hidden');
-                    return;
-                }
-                try {
-                    await createUserWithEmailAndPassword(auth, emailIn.value, passIn.value);
-                } catch (err) {
-                    loginError.textContent = "Error. Asegúrate de que la contraseña tenga mínimo 6 letras/números.";
-                    loginError.classList.remove('hidden');
-                }
-            });
+                document.getElementById('btnRegister').addEventListener('click', async () => {
+                    if(!emailIn.value || !passIn.value) {
+                        loginError.textContent = "Escribe un correo y contraseña para crear la cuenta.";
+                        loginError.classList.remove('hidden');
+                        return;
+                    }
+                    try {
+                        await createUserWithEmailAndPassword(auth, emailIn.value, passIn.value);
+                    } catch (err) {
+                        loginError.textContent = "Error. Asegúrate de que la contraseña tenga mínimo 6 letras/números.";
+                        loginError.classList.remove('hidden');
+                    }
+                });
+
             } catch (err) {
-                console.warn("Operando con guardado local inmediato (verifica Authentication > Anónimo en Firebase):", err);
+                console.warn("Operando con guardado local inmediato:", err);
                 updateSyncIndicator('Guardado local activo', 'bg-emerald-400');
             }
         }
