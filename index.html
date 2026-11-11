@@ -964,21 +964,9 @@
             Gael: { idealWeight: 4, birthDate: "2025-01-31", bio: "Persa negro" }
         };
 
-        const INITIAL_DEMO_RECORDS = [
-            { id: 'demo-1', cat: 'Enzo', date: '2025-11-15', weight: 4.20, notes: 'Control veterinario anual' },
-            { id: 'demo-10', cat: 'Gael', date: '2026-03-15', weight: 4.76, notes: 'Control mensual en casa' }
-        ];
-
-        const INITIAL_BLOOD_TESTS = [
-            { id: 'blood-1', cat: 'Enzo', date: '2026-02-10', param: 'T4 total', value: 2.10, notes: 'Chequeo preventivo anual' },
-            { id: 'blood-4', cat: 'Gael', date: '2026-02-10', param: 'Creatinina', value: 1.45, notes: 'Control renal razas persas' },
-            { id: 'blood-5', cat: 'Enzo', date: '2026-02-10', param: 'SDMA', value: 9.0, notes: 'Función renal óptima' }
-        ];
-
-        const INITIAL_CARE_ITEMS = [
-            { id: 'care-1', cat: 'Enzo', type: 'Baño y secado', title: 'Baño con champú blanqueador y secado tibio', lastDate: '2026-10-20', freqDays: 30, dose: 'Secar bien la base del pelaje' },
-            { id: 'care-7', cat: 'Enzo', type: 'Medicamento', title: 'Malta felina para control de bolas de pelo', lastDate: '2026-11-08', freqDays: 3, dose: '2 cm de pasta oral' }
-        ];
+        const INITIAL_DEMO_RECORDS = [];
+        const INITIAL_BLOOD_TESTS = [];
+        const INITIAL_CARE_ITEMS = [];
 
         // Estado reactivo en memoria
         let profiles = structuredClone(DEFAULT_PROFILES);
